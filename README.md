@@ -1,4 +1,4 @@
-<h4>The EU4 Mod Editor</h4>
+<h1>The EU4 Mod Editor</h1>
 
 <h3>WARNING: STILL IN VERY EARLY DEVELOPMENT, NOT READY FOR USE</h3>
 
