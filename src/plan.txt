@@ -1,0 +1,52 @@
+import existing mod into project
+export project into mod folder
+
+create new mod, export into mod folder
+
+each file contains one or more objects, which are what is important
+each object can be created new from a default template, or copied from an existing instance
+objects available to copy from both the current project, base game, or possibly even other projects. This will allow, say, base countries to be copied and modified
+
+export to files should give multiple options, but default to a single file per type for the mod.
+
+project structure:
+
+folders or a better abstraction?
+based on the files, or based on the actual objects, with the export handing the file stuff?
+
+based on objects:
+when importing, each object is parsed and has the file it came from attatched.
+when adding new objects, there is a choice of which file to add to, or to create a new one.
+
+different project views:
+    - edit view
+        - shows objects, can add/edit objects
+    - export view
+        - shows which objects will be put in which file
+        - also handles images
+        - sane defaults for each, i.e. flag images go in flag folder
+
+EditView:
+    Main page:
+        - List of sections with links
+    Section page:
+        - List of objects, with links
+    Object page:
+        - Allows the editing of objects
+    Sidebar has collapsable list of previous, so object page has list of objects, section page has list of sections, each has back link at top.
+ExportView:
+    Main page:
+        - List of sections with links
+    Section page:
+        - List of objects, with their output file assigned
+
+
+
+Editing/saving/syncing etc:
+
+Each form locally maintains its own state
+    state object will have a localState object, indexed on id which keeps track of any local changes, not saved. 
+    Form component (the meat of each object page, does all edits additions etc)
+    Form component will start using localState as soon as a change is made, and on load will check for this. main state project object will also be supplied, and the questions will be able to tell which changes have been made
+    Each form can be seperately saved, which will remove the localState and update the project object.
+    All changes can be saved at once, from the changes screen.

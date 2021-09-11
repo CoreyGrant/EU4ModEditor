@@ -1,0 +1,136 @@
+Advisors:
+    - common/advisortypes
+    - history/advisors
+Ages:
+    - common/ages
+AI:
+    - common/ai_army
+    - common/ai_attitudes
+    - common/ai_personalities
+    - common/ancestor_personalities
+Bookmarks:
+    - common/bookmarks
+Buildings:
+    - common/buildings
+Colonial Regions:
+    - common/colonial_regions
+Counties:
+    - common/countries
+    - common/country_colors
+    - common/country_tags
+    - common/common_country_colors
+    - history/countries
+Cultures:
+    - common/cultures
+Custom Ideas:
+    - common/custom_ideas
+Diplomacy:
+    - common/diplomatic_actions
+    - common/new_diplomatic_actions
+    - common/cb_types
+    - common/peace_treaties
+    - common/wargoal_types
+    - history/diplomacy
+    - history/wars
+Disasters:
+    - common/disasters
+Estates:
+    - common/estate_agendas
+    - common/estate_crown_land
+    - common/estate_privileges
+    - common/estates
+    - common/estates_preload
+Events:
+    - common/event_modifiers
+    - events
+Governments:
+    - common/decrees // chinese decrees
+    - common/factions
+    - common/federation_advancements
+    - common/government_names
+    - common/government_ranks
+    - common/government_reforms
+    - common/governments
+    - common/parliament_bribes
+    - common/parliament_issues
+Great Projects:
+    - common/great_projects
+Hegemons:
+    - common/hegemons
+HRE:
+    - common/imperial_incidents
+    - common/imperial_reforms
+Ideas:
+    - common/ideas
+Institutions:
+    - common/institutions
+Insults:
+    - common/insults
+Map:
+    - common/province_names
+    - common/province_triggered_modifiers
+    - history/provinces
+Natives:
+    - common/natives
+Policies:
+    - common/policies
+Power Projection:
+    - common/power_projection
+Rebel Types:
+    - common/rebel_types
+Religions:
+    - common/church_aspects
+    - common/defender_of_faith
+    - common/fervor
+    - common/fetishist_cults
+    - common/golden_bulls
+    - common/holy_orders
+    - common/incidents // shinto
+    - common/isolationism
+    - common/personal_deities
+    - common/religion_colors
+    - common/religions
+    - common/religious_conversions
+    - common/religious_reforms
+Revolt Triggers:
+    - common/revolt_triggers
+Revolution:
+    - common/revolution
+Rulers:
+    - common/dynasty_colors
+    - common/ruler_personalities
+Scripts/Modifiers:
+    - common/on_actions
+    - common/defines // lua scripts
+    - common/opinion_modifiers
+    - common/scripted_effects
+    - common/scripted_functions
+    - common/scripted_triggers
+    - common/static_modifiers
+    - common/timed_modifiers
+    - common/triggered_modifiers
+State Edicts:
+    - common/state_edicts
+Subjects:
+    - common/client_states
+    - common/subject_type_upgrades
+    - common/subject_types
+Trade Companies:
+    - common/trade_companies
+    - common/tradecompany_investments
+Trade:
+    - common/centers_of_trade
+    - common/prices
+    - common/tradegoods
+    - common/tradenodes
+    - common/trading_policies
+Technologies:
+    - common/technologies
+Military:
+    - common/mercenary_companies
+    - common/flagship_modifications
+    - common/naval_doctrines
+    - common/professionalism
+    - common/leader_personalities
+    - common/units
+    - common/units_display

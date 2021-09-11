@@ -1,0 +1,5 @@
+{
+    "monarchPower": ["ADM", "DIP", "MIL"],
+    "yesno": ["yes", "no"],
+    "advisorSkill": [1,2,3,4,5]
+}

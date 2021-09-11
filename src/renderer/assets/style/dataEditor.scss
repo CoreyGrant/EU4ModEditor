@@ -1,0 +1,25 @@
+.data-editor{
+    form{
+        padding: 10px;
+        .data-editor-question{
+            display: flex;
+            flex-direction: column;
+            label{
+
+            }
+            input{
+                width: 100%;
+                height: 30px;
+                font-size: 18px;
+            }
+            select{
+                width: 100%;
+                height: 30px;
+                font-size: 18px;
+            }
+            .old-value{
+                text-decoration: line-through;
+            }
+        }
+    }
+}

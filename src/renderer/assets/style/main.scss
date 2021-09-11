@@ -1,0 +1,115 @@
+@import "fontawesome.css";
+@import "variables.scss";
+@import "dataEditor.scss";
+
+@font-face{
+  font-family:"Roboto";
+  font-style:normal;
+  font-weight:400;
+  font-display:block;
+  src:url(../webfonts/Roboto/Roboto-Medium.ttf) format("truetype"),
+}
+#app{
+  color: #d4d4d4 !important;
+  font-family: Roboto !important;
+	background-color: $background-color !important;
+	height: 100vh;
+	overflow: hidden;
+  width: 100vw;
+}
+input{
+  font-family: Roboto !important;
+}
+table{
+  th{
+    color: #d4d4d4;
+  }
+}
+.app-content{
+  margin-left: 250px;
+  height: 100%;
+  width: calc(100% - 250px);
+  padding: 20px;
+}
+.side-navigation{
+  position: fixed;
+  height: 100%;
+  width: 250px;
+  background-color: $sidebar-color !important;
+}
+
+h1{
+  font-size: 36px
+}
+
+h2{font-size: 32px}
+h3{font-size: 28px}
+h4{font-size: 24px}
+h5{font-size: 20px;}
+h6{font-size: 16px;}
+p{font-size: 14px;}
+.hint{
+  color: $light-grey;
+  font-size: 11px;
+}
+
+i.fa{
+  font-size: 24px;
+}
+
+html {
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  user-select: none;
+  height: 100%;
+  width: 100%;
+}
+
+img {
+  box-shadow: none;
+}
+
+.section {
+  padding: 1.5em;
+}
+
+span + .material-icons {
+  margin-left: 0.25em;
+}
+
+.material-icons + span {
+  margin-left: 0.25em;
+}
+
+.has-pointer {
+  cursor: pointer;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+
+.file-name {
+  padding-top: 0.25em;
+}
+
+/* custom Scroll bars */
+::-webkit-scrollbar {
+  width: 10px !important;
+  height: 10px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #666666;
+}
