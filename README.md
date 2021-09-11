@@ -57,5 +57,5 @@ A few forms designed for a couple of objects</li>
 <li>Electron (using node and IPC) with VueJS/Vuex/Sass/Typescript for the "frontend"</li>
 <li>Currently just on windows, although Electron should be good for cross-platform compatability it's IO heavy so I don't know</li>
 <li>Everything is just the standard web stack, no database, json files. As much as possible has been pulled out into "config" like source files, so adding new forms/etc is very easy and fast.</li>
-<li>It <i>might<i> be possible to create a web version, but the server end would take a fair bit of work, and is not currently the focus. Desktop is all we need for modding.</li>
+<li>It <i>might</i> be possible to create a web version, but the server end would take a fair bit of work, and is not currently the focus. Desktop is all we need for modding.</li>
 </ul>
