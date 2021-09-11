@@ -42,7 +42,7 @@ To run in debug mode (no release mode yet), open CMD and run the following
 <ul><li>Basic framework for designing forms quickly, to allow easy configuration of editing different objects</li><li>
 Simple parser to read clauzwitz objects</li><li>
 A few forms designed for a couple of objects</li>
-
+</ul>
 <p>What's to come:</p>
 
 <ul><li>Might use a 3rd party parser, depending on compatability</li>
@@ -50,7 +50,7 @@ A few forms designed for a couple of objects</li>
 <li>Exporting, export will add whichever folders are complete, so once exporting is implimented the screens which are done will be usable!</li>
 <li>Image uploading/viewing</li>
 <li>etc...</li>
-
+</ul>
 <p>If you want to help, get in touch on the <a href="https://discord.gg/HMKN7tY7zV">discord</a>.</p>
 <p>Tech</p>
 <ul>
