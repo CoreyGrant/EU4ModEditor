@@ -1,6 +1,6 @@
 <template>
   <div class="advisor">
-    <data-form-editor :form="advisorForm" :value="advisor"></data-form-editor>
+    <data-form-editor :form="advisorForm" :value="advisor" :base-game-value="baseAdvisor"></data-form-editor>
   </div>
 </template>
 
@@ -8,6 +8,7 @@
 import Vue from 'vue'
 import DataFormEditor from '../../../components/DataFormEditor.vue';
 import {advisorForm} from '../../../forms/advisors';
+import {advisorType} from '../../../forms/shared/isInBase';
 
 export default Vue.extend({
   name: 'Advisor',
@@ -26,11 +27,8 @@ export default Vue.extend({
     advisor(): any{
       return this.$store.state.project.common.advisorTypes.find((x: any) => x.id == this.id)
     },
-    value(): []{
-      return this.advisor.data;
-    },
-    name():string{
-      return this.advisor.name;
+    baseAdvisor():any{
+      return this.$store.state.baseGame.common.advisorTypes.find((x:any) => advisorType(this.advisor, x));
     },
     id(): string{
       return this.$route.params.id;

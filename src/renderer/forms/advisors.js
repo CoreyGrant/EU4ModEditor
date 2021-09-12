@@ -17,8 +17,8 @@ var advisorForm = [{
     options: "monarchPower",
     required: true
 },{
-    label: "Bonus",
-    type: "bonus",
+    label: "Modifier",
+    type: "modifier",
     required: true,
     set: (advisor, val) => {
         var newBonusKeys = Object.keys(val.data);
@@ -63,8 +63,7 @@ var advisorForm = [{
     get: (advisor) => advisor.data.chance.factor,
 },{
     label: "AI will do",
-    type: "form",
-    form: "aiWillDo",
+    type: "aiwilldo",
     set: (advisor, val) => advisor.data.ai_will_do = val,
     get: (advisor) => advisor.data.ai_will_do,
 }];

@@ -16,6 +16,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Datatable from '../../../components/Datatable.vue';
+import {advisorType, advisorHistory, deep} from '../../../forms/shared/isInBase';
 
 export default Vue.extend({
   name: 'Advisors',
@@ -41,6 +42,20 @@ export default Vue.extend({
           },{
               title: "Monarch Power",
               display: (at: any) => at.data.monarch_power,
+          },{
+              title: "",
+              display: (at: any) => {
+                  var keyMatch = this.$store.state.baseGame.common.advisorTypes.find((x: any) => advisorType(x, at));
+                  if(!keyMatch){
+                      return "new";
+                  }
+                  var deepMatch = deep(keyMatch, at);
+                  if(deepMatch){
+                      return "identical";
+                  } else{
+                      return "overriding";
+                  }
+              }
           }];
       },
       historyAdvisorColumns(): any[]{
@@ -54,6 +69,20 @@ export default Vue.extend({
           },{
               title: "Type",
               display: (at: any) => at.data.type,
+          },{
+              title: "",
+              display: (at: any) => {
+                  var keyMatch = this.$store.state.baseGame.history.advisors.find((x: any) => advisorHistory(x, at));
+                  if(!keyMatch){
+                      return "new";
+                  }
+                  var deepMatch = this.$store.state.baseGame.history.advisors.find((x: any) => deep(x, at));
+                  if(deepMatch){
+                      return "identical";
+                  } else{
+                      return "overriding";
+                  }
+              }
           }];
       },
       advisorTypes(): []{

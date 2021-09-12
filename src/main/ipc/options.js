@@ -16,7 +16,7 @@ const loadOptionsName = getName('options', 'loadOptions');
 ipcMain.on(saveOptionsName.name, (event, arg) => {
     var options = arg;
     if(fs.existsSync(optionsFileName)){
-        fs.unlink(optionsFileName);
+        fs.unlink(optionsFileName, () => {});
     }
     fs.writeFileSync(
         optionsFileName,

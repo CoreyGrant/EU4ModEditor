@@ -2,7 +2,9 @@ import { app, BrowserWindow, Menu, session } from 'electron'
 import fs from 'fs';
 import pkg from '../../package.json'
 import path from 'path';
+import installExtenstion, {VUEJS_DEVTOOLS} from 'electron-devtools-installer';
 import './ipc/ipcMain';
+import { writeBaseGame } from './ipc/baseGame';
 import os from 'os';
 require('@electron/remote/main').initialize()
 
@@ -25,8 +27,16 @@ if(!fs.existsSync(projectFolderName)){
   fs.mkdirSync(projectFolderName);
 }
 var optionsFileName = path.join(projectFolderName, "options.json");
+var baseGameFileName = path.join(projectFolderName, "baseGame.json");
 if(!fs.existsSync(optionsFileName)){
-  fs.writeFileSync(optionsFileName, '{"eu4Path": ""}');
+  fs.writeFileSync(optionsFileName, '{"eu4Path": "", "prettyPrint": "no"}');
+} else{
+  var options = JSON.parse(fs.readFileSync(optionsFileName));
+  if(options.eu4Path && !fs.existsSync(baseGameFileName)){
+    try{
+      writeBaseGame(options.eu4Path);
+    } catch{}
+  }
 }
 
 // only allow single instance of application
@@ -49,14 +59,6 @@ if (!isDev) {
   require('electron-debug')({
     showDevTools: false,
   })
-}
-
-async function installDevTools() {
-  const vueDevToolsLocation = path.join(
-    os.homedir(),
-     'AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\5.3.4_0');
-    await session.defaultSession.loadExtension(vueDevToolsLocation);
-
 }
 
 function createWindow() {
@@ -108,14 +110,23 @@ function createWindow() {
 app.on('ready', () => {
   createWindow()
 
-  if (isDev) {
-    installDevTools()
-    mainWindow.webContents.openDevTools()
-  }
-
-  if (isDebug) {
-    installDevTools()
-    mainWindow.webContents.openDevTools()
+  if (isDebug || isDev) {
+    installExtenstion(VUEJS_DEVTOOLS)
+    .then((name) => {
+      console.log(`Added Extension:  ${name}`);
+      const win = BrowserWindow.getFocusedWindow()
+      if (win) {
+        win.webContents.on('did-frame-finish-load', () => {
+          win.webContents.once('devtools-opened', () => {
+            win.webContents.focus()
+          })
+          // open electron debug
+          console.log('Opening dev tools')
+          win.webContents.openDevTools()
+        })
+      }
+    })
+    .catch((err) => console.log('An error occurred: ', err));
   }
 })
 

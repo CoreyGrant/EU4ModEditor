@@ -1,7 +1,4 @@
 var aiWillDo = [
-    {
-        
-    }
 ]
 
 export default {

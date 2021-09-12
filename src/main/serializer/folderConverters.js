@@ -81,7 +81,8 @@ const commonMappings = {
 const commonFlatFileMappings = {
     "aiArmy": true,
     "bookmarks": true,
-    "countries": true
+    "countries": true,
+    "technologies": true
 }
 
 const historyFlatFileMappings = {

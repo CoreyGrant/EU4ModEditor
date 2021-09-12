@@ -5,6 +5,7 @@
       <h2>{{project.name}}</h2>
       <p>Path: {{project.baseFilePath}}</p>
       <router-link :to="exportLink">Export settings</router-link>
+      <router-link :to="imagesLink">Images</router-link>
       <ul>
         <li><router-link :to="advisorLink">Advisors</router-link></li>
       </ul>
@@ -31,6 +32,9 @@ export default Vue.extend({
     },
     exportLink(): string{
       return `/project/${this.project.name}/export`
+    },
+    imagesLink(): string{
+      return `/project/${this.project.name}/images`
     },
     advisorLink():string{
       return `/project/${this.project.name}/edit/advisors`;

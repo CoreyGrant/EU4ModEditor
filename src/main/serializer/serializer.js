@@ -68,7 +68,6 @@ function parseObject(stream){
     while(true){
         var char = stream.read(1);
         if(!char){
-            console.log("stream didnt emit a character");
             break;
         }
         if(char == '}'){

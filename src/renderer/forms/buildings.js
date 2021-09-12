@@ -4,6 +4,8 @@ var buildingForm = [{
     type: "text",
     set: (building, val) => building.name = val,
     get: (building) => building.name,
+    validators: ["euProp"],
+    mask: ["euProp"],
 },
 {
     label: "Cost",
@@ -18,8 +20,8 @@ var buildingForm = [{
     set: (building, val) => building.data.time = val,
     get: (building) => building.data.time,
 },{
-    label: "Bonus",
-    type: "bonus",
+    label: "Modifier",
+    type: "modifier",
     set: (building, val) => building.data.modifier = val,
     get: (building) => building.data.modifier,
 },{
@@ -52,8 +54,7 @@ var buildingForm = [{
     get: (building) => building.data.one_per_country,
 },{
     label: "Ai will do",
-    type: "form",
-    form: "aiWillDo",
+    type: "aiwilldo",
     set: (building, val) => building.data.ai_will_do = val,
     get: (building) => building.data.ai_will_do,
 }];

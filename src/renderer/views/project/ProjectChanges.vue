@@ -28,6 +28,9 @@ export default Vue.extend({
     localState(): string{
       return this.$store.state.localState;
     },
+    name(): string{
+        return this.$route.params.name;
+    },
     localStateArray():any[]{
         var keys = Object.keys(this.localState);
         return keys.map(x => ({
@@ -45,10 +48,10 @@ export default Vue.extend({
   },
   methods: {
       discardChanges(){
-          this.$store.commit("discardLocalState", {});
+          this.$store.commit("discardLocalState", {name: this.name});
       },
       saveChanges(){
-          this.$store.dispatch("saveLocalState", {})
+          this.$store.dispatch("saveLocalState", {name: this.name});
       }
   }
 })

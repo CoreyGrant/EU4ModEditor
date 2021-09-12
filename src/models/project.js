@@ -1,11 +1,12 @@
 export class Project{
-    constructor(name, baseFilePath, exportObj, common, history, events){
+    constructor(name, baseFilePath, exportObj, common, history, events, images){
         this.name = name;
         this.baseFilePath = baseFilePath;
         this.export = exportObj || new ProjectExport();
         this.common = common;
         this.history = history;
         this.events = events;
+        this.images = images;
     }
 
     name;
@@ -15,6 +16,8 @@ export class Project{
     common;
     history;
     events;
+
+    images;
 }
 
 export class ProjectCommon{ 
@@ -164,7 +167,7 @@ export class ProjectFile{
         this.type = type;
         this.fullPath = fullPath;
     }
-    // euObj = 0, yml = 1, tga = 2
+    // euObj = 0, yml = 1, tga = 2, dds = 3
     type;
     name;
     data;

@@ -1,5 +1,5 @@
 <template>
-	<div class="bonus-input">
+	<div class="ai-will-do-input">
       
     </div>
 </template>
@@ -8,7 +8,7 @@
 	import Vue from 'vue';
 
 	export default Vue.extend({
-		name: "BonusInput",
+		name: "AiWillDoInput",
 		components: {
 		},
 		data(): any {
@@ -18,6 +18,7 @@
 		mounted() {
 		},
 		props: {
+            value: Object
 		},
 		methods: {
 		}

@@ -1,3 +1,5 @@
+@import "variables.scss";
+
 .data-editor{
     form{
         padding: 10px;
@@ -17,8 +19,19 @@
                 height: 30px;
                 font-size: 18px;
             }
-            .old-value{
-                text-decoration: line-through;
+            .data-editor-question-different{
+                display: flex;
+                justify-content: space-between;
+                .old-value{
+                    font-size: 11px;
+                    text-align: start;
+                    color: $neon-orange;
+                }
+                .base-value{
+                    font-size: 11px;
+                    text-align: end;
+                    color: $neon-orange;
+                }
             }
         }
     }

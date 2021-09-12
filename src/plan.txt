@@ -50,3 +50,11 @@ Each form locally maintains its own state
     Form component will start using localState as soon as a change is made, and on load will check for this. main state project object will also be supplied, and the questions will be able to tell which changes have been made
     Each form can be seperately saved, which will remove the localState and update the project object.
     All changes can be saved at once, from the changes screen.
+
+Better project structure:
+current structure issues:
+    having the objects in an array for each type means we have to use .find to find our object, this is slow for large lists
+    can we have each object be indexed on it's id?
+        we can still loop over the contents, like an array
+        allows fast access for getting and updating
+Each object page needs fast access to read/write files

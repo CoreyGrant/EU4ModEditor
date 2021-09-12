@@ -17,6 +17,7 @@ import SideNavigation from './views/shared/SideNavigation.vue'
 import store from './store/index';
 import router from './router/index';
 
+
 Vue.use(Vuex)
 
 export default Vue.extend({
@@ -29,6 +30,10 @@ export default Vue.extend({
   },
   mounted(){
     this.$store.dispatch("loadOptions");
+    this.$store.dispatch("loadProjectNames");
+  },
+  methods(){
+
   },
   watch:{
     $route(to, from){
@@ -41,8 +46,8 @@ export default Vue.extend({
       if(from.params.name && !to.params.name){
         this.$store.commit('clearProject');
       }
-      if(!this.$store.state.optionsLoaded){
-        this.$store.dispatch("loadOptions");
+      if(to.params.name == 'home'){
+        this.$store.dispatch("loadProjectNames");
       }
     }
   }

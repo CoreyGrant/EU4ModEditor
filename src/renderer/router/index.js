@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import Project from '../views/project/Project.vue'
 import ExportProject from '../views/project/ExportProject.vue'
 import ProjectChanges from '../views/project/ProjectChanges.vue'
+import ProjectImages from '../views/project/ProjectImages.vue'
 import Advisors from '../views/project/sections/Advisors.vue'
 import Advisor from '../views/project/sections/Advisor.vue'
 import AdvisorHistory from '../views/project/sections/AdvisorHistory.vue'
@@ -14,6 +15,7 @@ import AddProject from '../views/project/AddProject.vue';
 Vue.use(Router)
 
 const router = new Router({
+  type: "hash",
   routes: [
     {
       path: '/',
@@ -90,6 +92,15 @@ const router = new Router({
       },
       name: "exportProject",
       component: ExportProject,
+    },
+    {
+      path: '/project/:name/images',
+      meta: {
+        title: 'ProjectImages',
+        icon: 'fa-info-circle',
+      },
+      name: "projectImages",
+      component: ProjectImages,
     },
     {
       path: '/addproject',
