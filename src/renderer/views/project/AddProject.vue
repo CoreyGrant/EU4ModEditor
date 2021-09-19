@@ -4,9 +4,18 @@
       <data-form-editor 
         :form="importProjectForm"
         :value="value"
-        :local-state="localState"
+        :standalone="true"
         @save="save"
         @discard="discard"></data-form-editor>
+    </div>
+    <div class="terminal">
+        <p v-for="(line, i) in last10Updates" :key="i">
+            <span v-if="line.type == 'error'" class="error">{{line.message}}</span>
+            <span v-if="line.type == 'log'" class="log">{{line.message}}</span>
+        </p>
+    </div>
+    <div>
+
     </div>
   </div>
 </template>
@@ -24,22 +33,33 @@ export default Vue.extend({
   data: function(): any{
     return {
       value: {},
-      localState: {},
+      updates: [],
+      complete: false
     }
   },
   computed:{
     importProjectForm(): any{
       return importProjectForm;
-    }
+    },
+    last10Updates(): []{
+          return this.updates.slice(-10)
+      },
   },
   methods:{
-    save(ip:any){
-      this.$store.dispatch("importProject", {name: ip.projectName, path: ip.projectPath});
-      this.localState = {};
-      this.value = {};
+    save(ip:any, done: any){
+      this.complete = false;
+      var payload = Object.assign({}, ip, {update: (s:string) => this.updates.push(s)})
+      this.$store.dispatch("importProject", payload)
+        .then((payload:any) => {
+          this.complete = true;
+          this.value = {};
+          done();
+          return this.$store.dispatch("loadProjects").then(() =>{
+            this.$router.push("/project/" + payload.id);
+          })
+        });
     },
     discard(){
-      this.localState = {};
       this.value = {};
     }
   },
@@ -48,5 +68,15 @@ export default Vue.extend({
 })
 </script>
 
-<style>
+<style lang="scss">
+.terminal{
+    font-size: 10px;
+    width: 100%;
+    height: 600px;
+    .log{
+    }
+    .error{
+        color: red;
+    }
+}
 </style>

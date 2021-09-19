@@ -18,6 +18,7 @@ const config = {
   devtool: isDevMode ? 'eval-source-map' : false,
   entry: {
     main: path.join(__dirname, '../src/main/index.js'),
+    preload: path.join(__dirname, '../src/main/preload.js')
   },
   externals: externals.filter((d) => !whiteListedModules.includes(d)),
   module: {
@@ -40,8 +41,8 @@ const config = {
   },
   node: {
     global: true,
-    __dirname: isDevMode,
-    __filename: isDevMode,
+    __dirname: false,
+    __filename: false,
   },
   plugins: [
     new webpack.DefinePlugin({

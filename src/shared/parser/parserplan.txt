@@ -1,0 +1,64 @@
+token parser
+
+finite state machine.
+
+each token we handle is handled with a seperate function, which takes the state
+
+each function will have detailed debugging activated with a debug flag
+
+global state:
+    data: [] nested arrays of {key, data, index} objects
+    buffers: [] the current buffers for each depth
+    comments: [] nested arrays of {key, comments, index} objects
+    position: [] array of the current indicies to target the correct data/comment
+    depth: 0 the current depth
+
+what are the different buffers we need to maintain for each depth?
+key
+value
+comment
+index
+
+what are the different states the machine can be in?
+Terms: 
+    any -> any token
+    buffer -> which ever key/value/comment buffer is active
+    output -> whatever is an actual text value. Usually just other, but comment and quote change which characters are saved
+
+readState:
+    0 (key):
+        set: when the state gets reset, default
+        when set: output goes to key buffer
+    1 (value):
+        set: when we find an equals
+        when set: output goes to value buffer
+    2 (comment):
+        set: when we find a comment
+        when set: output goes to comment buffer, output is any
+            if newline, sets self to 0
+
+inQuotes -> 
+    set: found quote
+    disabled: found quote when true
+    when true:
+        output is any, if true disables
+
+what are the tokens?
+space
+tab
+return
+    if state == 2 or inQuotes
+        output
+    ignore 
+newline
+open
+close
+comment
+quote
+equals
+quote
+other
+
+lexer + parser:
+
+lexer takes text and returns list of tokens

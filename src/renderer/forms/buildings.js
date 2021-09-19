@@ -5,7 +5,7 @@ var buildingForm = [{
     set: (building, val) => building.name = val,
     get: (building) => building.name,
     validators: ["euProp"],
-    mask: ["euProp"],
+    mask: "euProp",
 },
 {
     label: "Cost",
@@ -26,12 +26,12 @@ var buildingForm = [{
     get: (building) => building.data.modifier,
 },{
     label: "Build trigger",
-    type: "trigger",
+    type: "json",
     set: (building, val) => building.data.build_trigger = val,
     get: (building) => building.data.build_trigger,
 },{
     label: "Keep trigger",
-    type: "trigger",
+    type: "json",
     set: (building, val) => building.data.keep_trigger = val,
     get: (building) => building.data.keep_trigger,
 },{
@@ -54,7 +54,7 @@ var buildingForm = [{
     get: (building) => building.data.one_per_country,
 },{
     label: "Ai will do",
-    type: "aiwilldo",
+    type: "json",
     set: (building, val) => building.data.ai_will_do = val,
     get: (building) => building.data.ai_will_do,
 }];

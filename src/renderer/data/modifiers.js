@@ -493,7 +493,17 @@ export var ruleBannersModifiers = [
 ];
 
 export var expansions = {
-    '<estate>': (project) => project.common.estates.map(x => x.name.replace('estate_', '')),
-    '<faction>': (project) => project.common.factions.map(x => x.name),
-    '<tech>': (project) => project.common.technologies.map(x => x.data.monarch_power.toLowerCase() + "_tech")
+    '<estate>': (baseGame, project) => {
+            console.log(Object.values(project.common.estates));
+            debugger;
+            return project.common.estates 
+                ? Object.values(project.common.estates).map(x => x.name.replace('estate_', ''))
+                : Object.values(baseGame.common.estates).map(x => x.name.replace('estate_', ''))
+            },
+    '<faction>': (baseGame, project) => project.common.factions
+        ? Object.values(project.common.factions).map(x => x.name)
+        : Object.values(baseGame.common.factions).map(x => x.name),
+    '<tech>': (baseGame, project) => project.common.technologies
+        ? Object.values(project.common.technologies).map(x => x.data.monarch_power.toLowerCase() + "_tech")
+        : Object.values(baseGame.common.technologies).map(x => x.data.monarch_power.toLowerCase() + "_tech")
 };

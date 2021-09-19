@@ -16,7 +16,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Datatable from '../../../components/Datatable.vue';
-import {advisorType, advisorHistory, deep} from '../../../forms/shared/isInBase';
+import {single, deep} from '../../../forms/shared/isInBase';
 
 export default Vue.extend({
   name: 'Advisors',
@@ -31,29 +31,32 @@ export default Vue.extend({
   mounted(): void{
   },
   computed: {
-      projectName(): string{
-          return this.$route.params.name;
+      projectId(): string{
+          return this.$route.params.projectId;
       },
       advisorTypeColumns(): any[]{
           return [{
               title: "Name",
               display: (at: any) => at.name,
-              link: (at: any) => '/project/' + this.projectName + '/edit/advisor/' + at.id,
+              link: (at: any) => '/project/' + this.projectId + '/edit/advisor/' + at.id,
           },{
               title: "Monarch Power",
               display: (at: any) => at.data.monarch_power,
           },{
-              title: "",
+              title: "Base",
               display: (at: any) => {
-                  var keyMatch = this.$store.state.baseGame.common.advisorTypes.find((x: any) => advisorType(x, at));
+                  if(!Object.keys(this.$store.state.baseGame).length){
+                      return null
+                  }
+                  var keyMatch = Object.values(this.$store.state.baseGame.files.common.advisorTypes).find((x: any) => single.common.advisorTypes(x, at));
                   if(!keyMatch){
-                      return "new";
+                      return "<i class='fa fa-circle new' title='This object is new'></i>";
                   }
                   var deepMatch = deep(keyMatch, at);
                   if(deepMatch){
-                      return "identical";
+                      return "<i class='fa fa-circle identical' title='This object is identical to one in the base game'></i>";
                   } else{
-                      return "overriding";
+                      return "<i class='fa fa-circle overriding' title='This object overrides one in the base game'></i>";
                   }
               }
           }];
@@ -65,31 +68,38 @@ export default Vue.extend({
           },{
               title: "Name",
               display: (at: any) => at.data.name,
-              link: (at: any) => '/project/' + this.projectName + '/edit/advisorhistory/' + at.id,
+              link: (at: any) => '/project/' + this.projectId + '/edit/advisorhistory/' + at.id,
           },{
               title: "Type",
               display: (at: any) => at.data.type,
           },{
-              title: "",
+              title: "Base",
               display: (at: any) => {
-                  var keyMatch = this.$store.state.baseGame.history.advisors.find((x: any) => advisorHistory(x, at));
-                  if(!keyMatch){
-                      return "new";
+                  if(!Object.keys(this.$store.state.baseGame).length){
+                      return null
                   }
-                  var deepMatch = this.$store.state.baseGame.history.advisors.find((x: any) => deep(x, at));
+                  var keyMatch = Object.values(this.$store.state.baseGame.files.history.advisors).find((x: any) => single.history.advisors(x, at));
+                  if(!keyMatch){
+                      return "<i class='fa fa-circle new' title='This object is new'></i>";
+                  }
+                  var deepMatch = deep(keyMatch, at);
                   if(deepMatch){
-                      return "identical";
+                      return "<i class='fa fa-circle identical' title='This object is identical to one in the base game'></i>";
                   } else{
-                      return "overriding";
+                      return "<i class='fa fa-circle overriding' title='This object overrides one in the base game'></i>";
                   }
               }
           }];
       },
       advisorTypes(): []{
-          return (this.$store.state.project && this.$store.state.project.common.advisorTypes) || [];
+          return (this.$store.state.project 
+            && this.$store.state.project.common.advisorTypes
+            && Object.values(this.$store.state.project.common.advisorTypes)) || [];
       },
       historyAdvisors():[]{
-          return (this.$store.state.project && this.$store.state.project.history.advisors) || [];
+          return (this.$store.state.project 
+            && this.$store.state.project.history.advisors
+            && Object.values(this.$store.state.project.history.advisors)) || [];
       }
 
   }

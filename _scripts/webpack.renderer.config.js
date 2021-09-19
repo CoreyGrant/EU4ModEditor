@@ -108,8 +108,8 @@ const config = {
   },
   node: {
     global: true,
-    __dirname: isDevMode,
-    __filename: isDevMode,
+    __dirname: false,
+    __filename: false,
   },
   plugins: [
     // new WriteFilePlugin(),
@@ -117,9 +117,7 @@ const config = {
       excludeChunks: ['processTaskWorker'],
       filename: 'index.html',
       template: path.resolve(__dirname, '../src/index.ejs'),
-      nodeModules: isDevMode
-        ? path.resolve(__dirname, '../node_modules')
-        : false,
+      nodeModules: false,
     }),
     new VueLoaderPlugin(),
     new webpack.DefinePlugin({

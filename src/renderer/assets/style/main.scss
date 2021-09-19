@@ -10,7 +10,7 @@
   src:url(../webfonts/Roboto/Roboto-Medium.ttf) format("truetype"),
 }
 #app{
-  color: #d4d4d4 !important;
+  color: $text-color !important;
   font-family: Roboto !important;
 	background-color: $background-color !important;
 	height: 100vh;
@@ -22,7 +22,18 @@ input{
 }
 table{
   th{
-    color: #d4d4d4;
+    color: $text-color;
+  }
+}
+i.fa-circle{
+  &.new{
+    color: green;
+  }
+  &.identical{
+    color: red;
+  }
+  &.overriding{
+    color: yellow;
   }
 }
 .app-content{
@@ -51,6 +62,31 @@ p{font-size: 14px;}
 .hint{
   color: $light-grey;
   font-size: 11px;
+}
+
+.btn{
+  font-size: 20px;
+  color: $text-color;
+  border: 1px solid $text-color;
+  background-color: $background-color;
+  border-radius: 5px;
+  box-shadow: -1px -1px 1px $text-color;
+
+  &:hover{
+    box-shadow: -1px -1px 1px $text-color, 1px 1px 1px $text-color;
+  }
+}
+
+.btn-save{
+  background-color: $save-btn-background;
+  &:disabled{
+    cursor: not-allowed;
+    background-color: $save-btn-disabled-background;
+  }
+}
+
+.btn-discard{
+  background-color: $discard-btn-background;
 }
 
 i.fa{

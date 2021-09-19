@@ -16,7 +16,7 @@
             <tbody>
                 <tr v-for="(result, index) in pagedResults" :key="index">
                     <td v-for="column in columns" :key="column.title + index">
-                        <p v-if="!column.link">{{displayColumn(column, result)}}</p>
+                        <p v-if="!column.link" v-html="displayColumn(column, result)"></p>
                         <router-link :to="column.link(result)" v-if="column.link">{{displayColumn(column, result)}}</router-link>
                     </td>
                 </tr>

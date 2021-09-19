@@ -1,0 +1,4 @@
+browsers have limits on total webworkers, chrome is about 60.
+
+we want to have as few webworkers running as possible at once, with each one
+being long-lived and only accepting a single request at once

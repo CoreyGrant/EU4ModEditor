@@ -6,7 +6,7 @@ import {
     ProjectObjectExport,
     ProjectObjectFlat, 
     ProjectExport
-} from '../../models/project';
+} from '../models/project';
 
 // defaults to just using same name
 const commonMappings = {
@@ -95,6 +95,7 @@ const historyFlatFileMappings = {
 function convertCommonFolder(folder){
     var exports = [];
     var projectCommon = new ProjectCommon();
+    var commentsCommon = new ProjectCommon();
     for(var i = 0; i < folder.folders.length; i++){
         var subFolder = folder.folders[i];
         var prop = subFolder.name;
@@ -104,10 +105,12 @@ function convertCommonFolder(folder){
         // For each file in the folder, read all the properties as objects by default
         var flat = !!commonFlatFileMappings[prop];
         var objects = [];
+        var comments = [];
         for(var j = 0; j < subFolder.files.length; j++){
             var file = subFolder.files[j];
             var fileName = file.name;
             var fileData = file.data;
+            var fileComments = file.comments;
             if(flat){
                 var id = guid();
                 var projObj = new ProjectObjectFlat();
@@ -115,15 +118,20 @@ function convertCommonFolder(folder){
                 projObj.id = id;
                 projObj.name = fileName;
                 projObj.fileName = fileName;
+                comments.push({id, data: fileComments});
                 var projObjExport = new ProjectObjectExport();
                 projObjExport.id = id;
                 projObjExport.relativePath = "common/" + prop + "/" + fileName;
+                exports.push(projObjExport);
+                objects.push(projObj);
             } else{
                 var fileDataKeys = Object.keys(fileData);
                 for(var k = 0; k < fileDataKeys.length; k++){
                     var key = fileDataKeys[k];
                     var obj = fileData[key];
                     var id = guid();
+                    var comment = fileComments[key];
+                    comments.push({id, data: comment});
                     var projObj = new ProjectObject();
                     projObj.name = key;
                     projObj.data = obj;
@@ -136,24 +144,30 @@ function convertCommonFolder(folder){
                 }
             }
         }
-        projectCommon[prop] = objects;
+        var objectsObj = objects.reduce((prev, cur) => Object.assign(prev, {[cur.id]: cur}),{});
+        projectCommon[prop] = objectsObj;
+        var commentsObj = comments.reduce((prev, cur) => Object.assign(prev, {[cur.id]: cur}),{});
+        commentsCommon[prop] = commentsObj;
     }
-    return [projectCommon, exports]
+    return [projectCommon, exports, commentsCommon]
 }
 
 function convertHistoryFolder(folder){
     var exports = [];
-    var projectCommon = new ProjectCommon();
+    var projectCommon = new ProjectHistory();
+    var commentsCommon = new ProjectHistory();
     for(var i = 0; i < folder.folders.length; i++){
         var subFolder = folder.folders[i];
         var prop = subFolder.name;
         // For each file in the folder, read all the properties as objects by default
         var flat = !!historyFlatFileMappings[prop];
         var objects = [];
+        var comments = [];
         for(var j = 0; j < subFolder.files.length; j++){
             var file = subFolder.files[j];
             var fileName = file.name;
             var fileData = file.data;
+            var fileComments = file.comments;
             if(flat){
                 var id = guid();
                 var projObj = new ProjectObjectFlat();
@@ -161,15 +175,20 @@ function convertHistoryFolder(folder){
                 projObj.id = id;
                 projObj.name = key;
                 projObj.fileName = fileName;
+                comments.push({id, data: fileComments});
                 var projObjExport = new ProjectObjectExport();
                 projObjExport.id = id;
                 projObjExport.relativePath = "history/" + prop + "/" + fileName;
+                exports.push(projObjExport);
+                objects.push(projObj);
             } else{
                 var fileDataKeys = Object.keys(fileData);
                 for(var k = 0; k < fileDataKeys.length; k++){
                     var key = fileDataKeys[k];
                     var obj = fileData[key];
                     var id = guid();
+                    var comment = fileComments[key];
+                    comments.push({id, data: comment});
                     var projObj = new ProjectObject();
                     projObj.data = obj;
                     projObj.id = id;
@@ -181,16 +200,21 @@ function convertHistoryFolder(folder){
                 }
             }
         }
-        projectCommon[prop] = objects;
+        var objectsObj = objects.reduce((prev, cur) => Object.assign(prev, {[cur.id]: cur}),{});
+        projectCommon[prop] = objectsObj;
+        var commentsObj = comments.reduce((prev, cur) => Object.assign(prev, {[cur.id]: cur}),{});
+        commentsCommon[prop] = commentsObj;
     }
-    return [projectCommon, exports]
+    return [projectCommon, exports, commentsCommon]
 }
 
 function convertEventsFolder(folder){
     var exports = [];
     var events = [];
+    var commentsCommon = {};
     for(var i = 0; i < folder.files.length; i++){
         var file = folder.files[i];
+        var fileComments = file.comments;
         // For each file in the folder, read all the properties as objects by default
         var id = guid();
         var obj = new ProjectObjectFlat();
@@ -200,10 +224,12 @@ function convertEventsFolder(folder){
         var exp = new ProjectObjectExport();
         exp.id = id;
         exp.relativePath = "events/" + file.name;
+        commentsCommon[id] = {id, data: fileComments};
         exports.push(exp);
         events.push(obj);
     }
-    return [events, exports]
+    var objectsObj = events.reduce((prev, cur) => Object.assign(prev, {[cur.id]: cur}),{});
+    return [objectsObj, exports, commentsCommon];
 }
 
 export {

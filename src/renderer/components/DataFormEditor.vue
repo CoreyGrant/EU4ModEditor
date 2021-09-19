@@ -1,31 +1,33 @@
 <template>
 	<div class="data-editor">
-        <div class="base-status" v-if="baseGameValue">
+        <div class="base-status" v-if="baseGame">
             <p v-if="baseGameStatus == 'overriding'">Overriding</p>
             <p v-if="baseGameStatus == 'identical'">Identical</p>
             <p v-if="baseGameStatus == 'new'">New</p>
         </div>
-        <form>
+        <form @submit="saveForm">
             <div class="data-editor-question" v-for="question in form" :key="question.label">
                 <label>{{question.label}}</label>
                 <p class="hint" v-if="question.hint">{{question.hint}}</p>
-                <input :value="question.get(tempValue)" @input="inputChange(question, $event)" :type="question.type" class="form-control" v-if="question.type == 'text' || question.type == 'number'" />
-                <select :value="question.get(tempValue)" v-if="question.type == 'select'" @change="selectChange(question, $event)">
+                <input :value="questionGet(question, tempValue)" @input="inputChange(question, $event)" :type="question.type" class="form-control" v-if="question.type == 'text' || question.type == 'number'" />
+                <select :value="questionGet(question, tempValue)" v-if="question.type == 'select'" @change="selectChange(question, $event)">
                     <option v-for="item in getSelectList(question.options)" :key="item" :value="item">{{item}}</option>
                 </select>
-                <modifier-input v-if="question.type == 'modifier'" @change="valueChange(question, $event)" :value="question.get(tempValue)"></modifier-input>
-                <ai-will-do-input v-if="question.type == 'aiwilldo'" @change="valueChange(question, $event)" :value="question.get(tempValue)"></ai-will-do-input>
-                <date-input v-if="question.type == 'date'" @change="valueChange(question, $event)" :value="question.get(tempValue)"></date-input>
-                <folder-select v-if="question.type == 'folder'" @change="valueChange(question, $event)" :value="question.get(tempValue)"></folder-select>
-                <div class="data-editor-question-different">
-                    <p class="old-value" v-if="question.get(value) !== question.get(tempValue)">Was: {{question.get(value)}}</p>
-                    <p class="base-value" v-if="baseGameValue && question.get(baseGameValue) !== question.get(tempValue)">Base game: {{question.get(baseGameValue)}}</p>
+                <modifier-input v-if="question.type == 'modifier'" @change="valueChange(question, $event)" :value="questionGet(question, tempValue)" :type="question.options"></modifier-input>
+                <json-input v-if="question.type == 'json'" @change="valueChange(question, $event)" :value="questionGet(question, tempValue)" :errors="errors" :question="question" @error="jsonInputError(question, $event)"></json-input>
+                <date-input v-if="question.type == 'date'" @change="valueChange(question, $event)" :value="questionGet(question, tempValue)"></date-input>
+                <folder-select v-if="question.type == 'folder'" @change="valueChange(question, $event)" :value="questionGet(question, tempValue)"></folder-select>
+                <div class="data-editor-question-different" v-if="!standalone">
+                    <p class="old-value" v-if="!areEqual(questionGet(question, oldVal), questionGet(question, tempValue))">Was: {{questionGet(question, oldVal)}}</p>
+                    <p class="base-value" v-if="baseGame && !areEqual(questionGet(question, baseGame), questionGet(question, tempValue))">Base game: {{questionGet(question, baseGame)}}</p>
                 </div>
-                
+                <div class="data-editor-question-error" v-if="errors[question.label]">
+                    <p>{{errors[question.label]}}</p>
+                </div>
             </div>
             <div class="data-editor-buttons">
-                <button @click="saveForm" type="button">Save</button>
-                <button @click="discardForm" type="button">Discard</button>
+                <button @click="saveForm" type="button" :disabled="!formValid || saving" class="btn btn-save">{{saving ? "Saving..." : "Save"}}</button>
+                <button class="btn btn-discard" @click="discardForm" type="button">Discard</button>
             </div>
         </form>
     </div>
@@ -38,8 +40,10 @@
     import selectLists from '../forms/shared/selectLists.json';
     import ModifierInput from './ModifierInput.vue';
     import DateInput from './DateInput.vue';
+    import JsonInput from './JsonInput.vue';
     import FolderSelect from './FolderSelect.vue';
-    import {deep} from '../forms/shared/isInBase';
+    import {deep, single} from '../forms/shared/isInBase';
+    import _ from 'lodash';
 
     // Cen be used directly using the state store (localState),
     // Or with a supplied localState object
@@ -49,12 +53,14 @@
             ModifierInput,
             DateInput,
             FolderSelect,
+            JsonInput,
 		},
 		data(): any {
             return {
                 errors: {},
-                tempValue: {path: ''},
+                tempValue: {},
                 baseGameStatus: '',
+                saving: false
             }
 		},
 		created() {
@@ -62,40 +68,95 @@
         },
 		props: {
             form: Array,
+            standalone: Boolean,
+            path: Array,
             value: Object,
-            localState: Object,
-            baseGameValue: Object,
 		},
         computed:{
-            id():string{
-                return this.$route.params.id;
+            objectId():string{
+                return this.$route.params.objectId;
             },
-            name(): string{
-                return this.$route.params.name;
+            projectId(): string{
+                return this.$route.params.projectId;
             },
-            getLocalState(): any{
-                return this.localState || (
-                    this.$store.state.localState[this.id]
-                        ? JSON.parse(JSON.stringify(this.$store.state.localState[this.id]))
-                        : undefined);
+            oldVal(): any{
+                return this.standalone ? this.value : this.integratedValue;
+            },
+            integratedValue(): any{
+                var projType = this.getPath(this.$store.state.project, this.path);
+                return projType[this.objectId];
+            },
+            formValid(): boolean{
+                return !Object.keys(this.errors).length;
+            },
+            baseGame(): any{
+                if(this.standalone){return null}
+                if(!Object.keys(this.$store.state.baseGame)){
+                    return null;
+                }
+                var comparison = this.getPath(single, this.path);
+                var bgType = this.getPath(this.$store.state.baseGame.files, this.path);
+                return Object.values(bgType).find((bg: any) => comparison(bg, this.oldVal)) || null;
             }
         },
 		methods: {
+            jsonInputError(question: any, message: string){
+                if(message == null){
+                    Vue.delete(this.errors, question.name);
+                } else{
+                    Vue.set(this.errors, question.name, message);
+                }
+            },
+            getPath(obj: any, path: string[]){
+                var objCopy = obj;
+                for(var p of path){
+                    objCopy = objCopy[p];
+                }
+                return objCopy;
+            },
+            questionGet(question: any, val: any){
+                // don't like this but initial load throws errors because of null
+                // full error checking every time is just a pain
+                try{
+                    return question.get(val);
+                } catch{}
+            },
+            areEqual(o1: any, o2: any){
+                if(typeof o1 === 'object' && typeof o2 === 'object'){
+                    return _.isEqual(o1, o2);
+                } else{
+                    return o1 === o2;
+                }
+            },
             getSelectList(key: any): string[]{
                 if(typeof key === "string"){
                     return (<any>selectLists)[key];
                 }
                 return key(this.$store.state);
             },
-            validate(value: any, question: any){
-                var valids = question.validators;
+            validate(value: any, question: any): boolean{
+                if(question.type === "json"){
+                    return !!this.errors[question.name]; // handles its own validation
+                }
+                var errorFound = false;
+                if(!question.optional && 
+                    (value === undefined || value === "" || value === null)){
+                    Vue.set(this.errors, question.label, "A value is required");
+                    return true;
+                }
+                var valids = question.validators || [];
                 for(var i = 0; i < valids.length; i++){
                     var validator = valids[i];
                     var errorMessage = (<any>validators)[validator](value);
                     if(errorMessage){
-                        Vue.set(this.errors, question.name, errorMessage.replace(/\{0\}/, value));
+                        errorFound = true;
+                        Vue.set(this.errors, question.label, errorMessage.replace(/\{0\}/, value));
                     }
                 }
+                if(!errorFound){
+                    Vue.delete(this.errors, question.label);
+                }
+                return errorFound;
             },
             mask(mask: any, value: any){
                 return (<any>masks)[mask](value);
@@ -104,13 +165,8 @@
                 if(question.mask){
                     value = this.mask(question.mask, value);
                 }
+                this.validate(value, question);
                 question.set(this.tempValue, value);
-                if(!this.localState){
-                    Vue.nextTick(() => {
-                        this.tempValue.path = this.$route.path;
-                        this.$store.commit('setLocalState', {name: this.name, localState: JSON.parse(JSON.stringify(this.tempValue))});
-                    });
-                }
             },
             inputChange(question: any, event: any){
                 this.valueChange(question, event.target.value);
@@ -119,34 +175,53 @@
                 this.valueChange(question, event.target.value);
             },
             load(){
-                Vue.nextTick(() => {
-                    this.tempValue = this.getLocalState
-                        ? this.getLocalState
-                        : JSON.parse(JSON.stringify(this.value));
-                    // only for integrated version
-                    if(!this.localState){
-                        var match = !!this.baseGameValue;
-                        if(!match){
-                            this.baseGameStatus = 'new'
-                        }
-                        if(deep(match, this.tempValue)){
-                            this.baseGameStatus = 'identical';
-                        } else {
-                            this.baseGameStatus = 'overriding';
-                        }
+                this.tempValue = JSON.parse(JSON.stringify(this.oldVal));
+                // only for integrated version
+                if(!this.standalone){
+                    var match = !!this.baseGame;
+                    if(!match){
+                        this.baseGameStatus = 'new'
                     }
-                });
+                    if(deep(match, this.tempValue)){
+                        this.baseGameStatus = 'identical';
+                    } else {
+                        this.baseGameStatus = 'overriding';
+                    }
+                }
             },
-            saveForm(){
-                this.localState 
-                    ? this.$emit('save', this.tempValue)
-                    : this.$store.dispatch('saveLocalState', {name: this.name, id: this.id});
+            validateForm(){
+                var formValid = true;
+                this.errors = {};
+                for(var question of this.form){
+                    var errorFound = this.validate(question.get(this.tempValue), question);
+                    if(errorFound){
+                        formValid = false;
+                    }
+                }
+                return formValid;
+            },
+            saveForm(event: any){
+                event.preventDefault();
+                if(!this.validateForm()){
+                    return;
+                }
+                if(this.standalone){
+                    this.saving = true;
+                    this.$emit('save', this.tempValue, () => this.saving = false);
+                } else {
+                    this.saving = true;
+                    this.$store.dispatch('updateProjectObject', {
+                        path: this.path,
+                        objectId: this.objectId,
+                        projectId: this.projectId,
+                        files: this.tempValue,
+                    }).then(() => this.saving = false);
+                }
                 this.load();
             },
             discardForm(){
-                this.localState
-                    ? this.$emit('discard', this.tempValue)
-                    : this.$store.commit('discardLocalState', {name: this.name, id: this.id});
+                this.standalone
+                    && this.$emit('discard', this.tempValue)
                 this.load();
             }
 		},

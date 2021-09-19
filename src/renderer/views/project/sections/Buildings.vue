@@ -21,14 +21,14 @@ export default Vue.extend({
   mounted(): void{
   },
   computed: {
-      projectName(): string{
-          return this.$route.params.name;
+      projectId(): string{
+          return this.$route.params.projectId;
       },
       buildingColumns(): any[]{
           return [{
               title: "Name",
               display: (bu: any) => bu.name,
-              link: (bu: any) => '/project/' + this.projectName + '/edit/building/' + bu.id,
+              link: (bu: any) => '/project/' + this.projectId + '/edit/building/' + bu.id,
           }];
       },
       buildings():[]{

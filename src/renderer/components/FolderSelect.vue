@@ -26,20 +26,23 @@
 		},
 		methods: {
 			folderSelectChange() {
-        var file = this.$refs.folderFiles.files[0];
+        		var file = this.$refs.folderFiles.files[0];
 				var modFolder: string = file.webkitRelativePath.split('/')[0];
-        var fullFolderPath = file.path.split(modFolder)[0] + modFolder;
+        		var fullFolderPath = file.path.split(modFolder)[0] + modFolder;
 				this.$emit('change', fullFolderPath);
 				this.fullFolderPath = fullFolderPath;
 			},
 			selectFolder(){
 				this.$refs.folderFiles.click();
+				// changes don't register on empty folders, so we need to poll input for value
 			}
+		},
+		computed: {
 		},
 		watch: {
 			value(){
 				this.fullFolderPath = this.value;
-			}
+			},
 		}
 	});
 </script>

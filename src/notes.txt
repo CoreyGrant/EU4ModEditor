@@ -1,0 +1,9 @@
+App data structure:
+
+app = options and projectnames
+baseGame = the base game structure
+project = the current loaded project
+    exports
+    images
+    common/history/events
+    scripts?

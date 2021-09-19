@@ -1,0 +1,108 @@
+[
+  {
+    "test": {
+      "test_prop_one": "1",
+      "test_prop_two": {
+        "test_subprop_one": "1"
+      },
+      "test_prop_three": [
+        "list_val_one",
+        "list_val_two",
+        "list_val_three",
+        "\"quote val\""
+      ],
+      "silly": {
+        "silly_prop": "silly_value"
+      },
+      "test_color": [
+        "100",
+        "200",
+        "300"
+      ],
+      "test_inline": {
+        "a": "a",
+        "b": "b",
+        "c": "c",
+        "d": "d",
+        "e": "e"
+      },
+      "test_comment": {
+        "test_comment_property": "\"test value\"",
+        "test_comment_property_two": "3"
+      },
+      "test_repeated": {
+        "repeat_prop": "value_one",
+        "repeat_prop:1": "value_two"
+      }
+    },
+    "test_2": {
+      "test_prop_one": "1"
+    }
+  },
+  {
+    "test": {
+      ":comment": {},
+      "test_prop_one": {},
+      "test_prop_two": {
+        ":comment": {},
+        "test_subprop_one": {}
+      },
+      "test_prop_three": {
+        ":comment": {},
+        "list_val_one": {
+          ":post": "list comment"
+        },
+        "list_val_two": {},
+        "list_val_three": {
+          ":pre": "inline list comment"
+        },
+        "\"quote val\"": {}
+      },
+      "silly": {
+        ":comment": {},
+        "silly_prop": {}
+      },
+      "test_color": {
+        "100": {},
+        "200": {},
+        "300": {},
+        ":comment": {}
+      },
+      "test_inline": {
+        ":comment": {},
+        "a": {},
+        "b": {},
+        "c": {},
+        "d": {},
+        "e": {}
+      },
+      "test_comment": {
+        ":comment": {
+          ":pre": "above inline",
+          ":post": "after object open"
+        },
+        "test_comment_property": {
+          ":pre": "above property",
+          ":post": "after property"
+        },
+        "test_comment_property_two": {
+          ":pre": "after property newline",
+          ":post": "after property two"
+        }
+      },
+      "test_repeated": {
+        ":comment": {},
+        "repeat_prop": {
+          ":post": "repeat prop comment 1"
+        },
+        "repeat_prop:1": {
+          ":post": "repeat prop comment 2"
+        }
+      }
+    },
+    "test_2": {
+      ":comment": {},
+      "test_prop_one": {}
+    }
+  }
+]

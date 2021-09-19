@@ -6,7 +6,7 @@
         </li>
       </ul>
       <ul class="navigation-options">
-          <li><i class="fa fa-cog" @click="navigate('/options')"></i></li>
+          <li><i class="fa fa-cog" style="cursor: pointer" @click="navigate('/appSettings')"></i></li>
       </ul>
   </nav>
 </template>
@@ -33,14 +33,14 @@ export default Vue.extend({
       },
       projectLink(): any{
         return {
-            name: this.$route.params.name || "",
-            path: "/project/" + this.$route.params.name
+            name: this.$store.state.app.projectSettings.name,
+            path: "/project/" + this.$route.params.projectId
         };
       },
       advisorsLink(): any{
           return {
             name: "Advisors",
-            path: "/project/" + this.$route.params.name + "/edit/advisors"
+            path: "/project/" + this.$route.params.projectId + "/edit/advisors"
           };
       }
   },
@@ -72,9 +72,13 @@ export default Vue.extend({
             return [this.homeLink, this.projectLink, this.advisorsLink];
         case "exportProject":
             return [this.homeLink, this.projectLink];
+          case "projectImages":
+            return [this.homeLink, this.projectLink];
         case "addProject":
             return [this.homeLink];
-        case "options":
+        case "appSettings":
+            return [this.homeLink];
+        case "baseGameVersions":
             return [this.homeLink];
         default:
           return [];

@@ -9,6 +9,7 @@
     "get-canvas-context": "^1.0.2",
     "glo-shader": "^1.0.3",
     "glo-texture": "^1.0.1",
+    "iconv-lite": "^0.6.3",
     "material-design-icons": "^3.0.1",
     "parse-dds": "^1.2.1",
     "preview-dds": "^1.0.1",
@@ -17,7 +18,8 @@
     "vue": "^2.6.12",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.5.1",
-    "vuex": "^3.6.2"
+    "vuex": "^3.6.2",
+    "windows-1252": "^3.0.2"
   },
   "description": "A mod editor for eu4",
   "devDependencies": {
@@ -32,6 +34,7 @@
     "@types/eslint": "^7.2.9",
     "@types/eslint-plugin-prettier": "^3.1.0",
     "@types/file-loader": "^4.2.1",
+    "@types/lodash": "^4.14.172",
     "@types/mini-css-extract-plugin": "^1.4.1",
     "@types/prettier": "^2.2.3",
     "@types/sass": "^1.16.0",

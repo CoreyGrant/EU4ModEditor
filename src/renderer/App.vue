@@ -29,27 +29,12 @@ export default Vue.extend({
     SideNavigation
   },
   mounted(){
-    this.$store.dispatch("loadOptions");
-    this.$store.dispatch("loadProjectNames");
+
   },
-  methods(){
+  methods: {
 
   },
   watch:{
-    $route(to, from){
-      if(from.params.name && !to.params.name && Object.keys(this.$store.state.localState).length){
-        this.$router.push(`/project/${from.params.name}/changes?redirect=${encodeURI(to.path)}`);
-      }
-      if(to.params.name && to.params.name !== from.params.name){
-        this.$store.dispatch("loadProject", {name: to.params.name});
-      }
-      if(from.params.name && !to.params.name){
-        this.$store.commit('clearProject');
-      }
-      if(to.params.name == 'home'){
-        this.$store.dispatch("loadProjectNames");
-      }
-    }
   }
 
 })

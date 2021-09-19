@@ -3,9 +3,6 @@ import fs from 'fs';
 import pkg from '../../package.json'
 import path from 'path';
 import installExtenstion, {VUEJS_DEVTOOLS} from 'electron-devtools-installer';
-import './ipc/ipcMain';
-import { writeBaseGame } from './ipc/baseGame';
-import os from 'os';
 require('@electron/remote/main').initialize()
 
 // set app name
@@ -26,17 +23,17 @@ const projectFolderName = path.join(userDataPath, "eu4modeditor-projects");
 if(!fs.existsSync(projectFolderName)){
   fs.mkdirSync(projectFolderName);
 }
-var optionsFileName = path.join(projectFolderName, "options.json");
-var baseGameFileName = path.join(projectFolderName, "baseGame.json");
-if(!fs.existsSync(optionsFileName)){
-  fs.writeFileSync(optionsFileName, '{"eu4Path": "", "prettyPrint": "no"}');
-} else{
-  var options = JSON.parse(fs.readFileSync(optionsFileName));
-  if(options.eu4Path && !fs.existsSync(baseGameFileName)){
-    try{
-      writeBaseGame(options.eu4Path);
-    } catch{}
-  }
+var appSettingsFileName = path.join(projectFolderName, "appSettings.json");
+var projectListFileName = path.join(projectFolderName, "projectList.json");
+var baseGameFolder = path.join(projectFolderName, "baseGame");
+if(!fs.existsSync(appSettingsFileName)){
+  fs.writeFileSync(appSettingsFileName, '{"prettyPrint": "no"}');
+}
+if(!fs.existsSync(projectListFileName)){
+  fs.writeFileSync(projectListFileName, '{"list": []}');
+}
+if(!fs.existsSync(baseGameFolder)){
+  fs.mkdirSync(baseGameFolder);
 }
 
 // only allow single instance of application
@@ -65,6 +62,8 @@ function createWindow() {
   /**
    * Initial window options
    */
+  var preload = path.join(__dirname, "preload.js");
+
   mainWindow = new BrowserWindow({
     backgroundColor: '#fff',
     width: 1500,
@@ -74,14 +73,13 @@ function createWindow() {
     // useContentSize: true,
     webPreferences: {
       nodeIntegration: true,
-      nodeIntegrationInWorker: false,
+      nodeIntegrationInWorker: true,
       contextIsolation: false,
-      webSecurity: false,
-      enableRemoteModule:process.env != "production"
+      webSecurity: true,
+      preload
     },
-    show: false,
+    show: false
   })
-
   // eslint-disable-next-line
   setMenu()
 

@@ -1,13 +1,13 @@
 <template>
   <div class="advisor">
-    <data-form-editor :form="buildingForm" :value="building"></data-form-editor>
+    <data-form-editor :form="buildingForm" :path="['common', 'buildings']"></data-form-editor>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import DataFormEditor from '../../../components/DataFormEditor.vue';
-import {buildingForm} from '../../../forms/building';
+//import {buildingForm} from '../../../forms/building';
 
 export default Vue.extend({
   name: 'Building',
@@ -21,19 +21,10 @@ export default Vue.extend({
   },
   computed: {
     buildingForm(): any{
-      return buildingForm;
-    },
-    building(): any{
-      return this.$store.state.project.common.building.find((x: any) => x.id == this.id)
-    },
-    value(): []{
-      return this.building.data;
-    },
-    name():string{
-      return this.building.name;
+      return //buildingForm;
     },
     id(): string{
-      return this.$route.params.id;
+      return this.$route.params.objectId;
     }
   },
   methods: {

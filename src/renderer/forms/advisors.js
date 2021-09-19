@@ -7,7 +7,7 @@ var advisorForm = [{
     set: (advisor, val) => advisor.name = val,
     get: (advisor) => advisor.name,
     validators: ["euProp"],
-    mask: ["euProp"],
+    mask: "euProp",
     required: true
 },{
     label: "Monarch power",
@@ -19,6 +19,7 @@ var advisorForm = [{
 },{
     label: "Modifier",
     type: "modifier",
+    options: "country",
     required: true,
     set: (advisor, val) => {
         var newBonusKeys = Object.keys(val.data);
@@ -38,7 +39,6 @@ var advisorForm = [{
     get: (advisor) => {
         var advisorKeys = Object.keys(advisor.data);
         var advisorBonusKeys = advisorKeys.filter(x => advisorNonBonusKeys.indexOf(x) === -1);
-        console.log(advisorBonusKeys);
         var outputObj = {};
         for(var i = 0; i < advisorBonusKeys.length; i++){
             var abk = advisorBonusKeys[i];
@@ -56,14 +56,13 @@ var advisorForm = [{
     required: true,
     default: 0.25
 },{
-    label: "Chance factor",
-    type: "number",
-    default: 1,
-    set: (advisor, val) => advisor.data.chance.factor = val,
-    get: (advisor) => advisor.data.chance.factor,
+    label: "Chance",
+    type: "json",
+    set: (advisor, val) => advisor.data.chance = val,
+    get: (advisor) => advisor.data.chance,
 },{
     label: "AI will do",
-    type: "aiwilldo",
+    type: "json",
     set: (advisor, val) => advisor.data.ai_will_do = val,
     get: (advisor) => advisor.data.ai_will_do,
 }];
@@ -103,7 +102,7 @@ var advisorHistoryForm = [{
     label: "Type",
     type: "select",
     options: (state) => {
-        return state.project.common.advisorTypes.map(x => x.name);
+        return Object.values(state.project.common.advisorTypes).map(x => x.name);
     },
     set: (ah, val) => ah.data.type = val,
     get: (ah) => ah.data.type

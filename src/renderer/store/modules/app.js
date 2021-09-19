@@ -1,40 +1,43 @@
-import {saveOptions, loadOptions} from '../../ipc/options';
-import {getProjectSummaries} from '../../ipc/project';
+import { loadSettings, loadProjectList, saveSettings } from "../../webworkers/workers";
 
 export default {
     state :() =>({
-        projectNames: [],
-        options: {
-            eu4Path: '',
-            prettyPrint: 'no'
+        projects: window.eu4modeditor.default.projectList,
+        settings: window.eu4modeditor.default.appSettings,
+        projectSettings: {
+            baseGameVersion: null,
+            name: '',
         },
-        importingBaseGame: false
+        baseGameVersions: window.eu4modeditor.default.baseGameVersions
     }),
     mutations: {
-        setOptions(state, payload){
-            state.options = payload.options;
+        setSettings(state, payload){
+            state.options = payload.appSettings;
         },
-        setProjectNames(state, payload){
-            state.projectNames = payload.projectNames;
+        // called from importing/loading project
+        setProjectSettings(state, payload){
+            state.projectSettings = payload.projectSettings;
         },
-        setImportingBaseGame(state, payload){
-            state.importingBaseGame = payload.importingBaseGame;
+        setProjects(state, payload){
+            state.projects = payload.projects;
+        },
+        // called when importing a base game
+        setBaseGameVersions(state, payload){
+            state.baseGameVersions = payload.baseGameVersions;
         }
     },
     actions: {
-        loadOptions(context, payload){
-            loadOptions(options => {
-                console.log(options);
-                context.commit('setOptions', {options});
-            })
+        loadSettings(context, payload){
+            return loadSettings(payload)
+                .then((appSettings) => context.commit('setSettings', {appSettings}));
         },
-        saveOptions(context, payload){
-            saveOptions(payload.options, () => {});
+        saveSettings(context, payload){
+            context.commit("setSettings", {projectSettings: payload})
+            return saveSettings(payload);
         },
-        loadProjectNames(context){
-            getProjectSummaries((projectNames) => 
-                context.commit("setProjectNames", {projectNames})
-            );
-        }
+        loadProjects(context, payload){
+            return loadProjectList(payload)
+            .then((projects) => context.commit('setProjects', {projects}));
+        },
     }
 }

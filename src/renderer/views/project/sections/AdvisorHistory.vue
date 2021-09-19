@@ -1,6 +1,8 @@
 <template>
   <div class="advisor-history">
-    <data-form-editor :form="advisorHistoryForm" :value="value"></data-form-editor>
+    <data-form-editor 
+      :form="advisorHistoryForm"
+      :path="['history', 'advisors']"></data-form-editor>
   </div>
 </template>
 
@@ -10,7 +12,7 @@ import DataFormEditor from '../../../components/DataFormEditor.vue';
 import {advisorHistoryForm} from '../../../forms/advisors';
 
 export default Vue.extend({
-  name: 'Section',
+  name: 'AdvisorHistory',
   components: {
     DataFormEditor,
   },
@@ -24,11 +26,8 @@ export default Vue.extend({
     advisorHistoryForm(): any[]{
       return advisorHistoryForm;
     },
-    value(): []{
-      return this.$store.state.project.history.advisors.find((x: any) => x.id == this.id);
-    },
     id(): string{
-      return this.$route.params.id;
+      return this.$route.params.objectId;
     }
   },
   methods: {

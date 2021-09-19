@@ -1,6 +1,7 @@
+const { fstat } = require('fs')
 const path = require('path')
 const webpack = require('webpack')
-
+const fs = require('fs');
 const {
   dependencies,
   devDependencies,
@@ -9,14 +10,19 @@ const {
 
 const externals = Object.keys(dependencies).concat(Object.keys(devDependencies))
 const isDevMode = process.env.NODE_ENV === 'development'
-
+var webworkers = path.join(__dirname, '../src/renderer/webworkers');
+entry = fs.readdirSync(webworkers).filter(x => x.indexOf("workers.js") === -1 && path.extname(x) == ".js")
+  .reduce((prev, cur) => {
+    var basename = path.basename(cur);
+    var nameWithoutExt = basename.split(".js")[0];
+    return Object.assign({}, prev, {[nameWithoutExt]: path.join(webworkers, cur)})
+  }, {});
+console.log(entry);
 const config = {
   name: 'workers',
   mode: process.env.NODE_ENV,
   devtool: isDevMode ? 'eval-source-map' : false,
-  entry: {
-    workerSample: path.join(__dirname, '../src/utilities/workerSample.ts'),
-  },
+  entry,
   output: {
     libraryTarget: 'commonjs2',
     path: path.join(__dirname, '../dist'),
@@ -43,8 +49,8 @@ const config = {
   },
   node: {
     global: true,
-    __dirname: isDevMode,
-    __filename: isDevMode,
+    __dirname: false,
+    __filename: false,
   },
   plugins: [
     // new WriteFilePlugin(),

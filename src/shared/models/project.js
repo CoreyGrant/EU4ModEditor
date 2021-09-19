@@ -1,5 +1,5 @@
 export class Project{
-    constructor(name, baseFilePath, exportObj, common, history, events, images){
+    constructor(name, baseFilePath, exportObj, common, history, events, images, commonComments, historyComments, eventsComments){
         this.name = name;
         this.baseFilePath = baseFilePath;
         this.export = exportObj || new ProjectExport();
@@ -7,6 +7,9 @@ export class Project{
         this.history = history;
         this.events = events;
         this.images = images;
+        this.commonComments = commonComments;
+        this.historyComments = historyComments;
+        this.eventsComments = eventsComments;
     }
 
     name;
@@ -16,7 +19,9 @@ export class Project{
     common;
     history;
     events;
-
+    commonComments;
+    historyComments;
+    eventsComments;
     images;
 }
 
@@ -161,16 +166,18 @@ export class ProjectFolder{
 }
 
 export class ProjectFile{
-    constructor(name, data, type, fullPath){
+    constructor(name, data, type, fullPath, comments = null){
         this.name = name;
         this.data = data;
         this.type = type;
+        this.comments = comments;
         this.fullPath = fullPath;
     }
     // euObj = 0, yml = 1, tga = 2, dds = 3
     type;
     name;
     data;
+    comments;
     fullPath;
     // used for files where we copy rather than parse
     localPath;

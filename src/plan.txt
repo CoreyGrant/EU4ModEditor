@@ -1,47 +1,3 @@
-import existing mod into project
-export project into mod folder
-
-create new mod, export into mod folder
-
-each file contains one or more objects, which are what is important
-each object can be created new from a default template, or copied from an existing instance
-objects available to copy from both the current project, base game, or possibly even other projects. This will allow, say, base countries to be copied and modified
-
-export to files should give multiple options, but default to a single file per type for the mod.
-
-project structure:
-
-folders or a better abstraction?
-based on the files, or based on the actual objects, with the export handing the file stuff?
-
-based on objects:
-when importing, each object is parsed and has the file it came from attatched.
-when adding new objects, there is a choice of which file to add to, or to create a new one.
-
-different project views:
-    - edit view
-        - shows objects, can add/edit objects
-    - export view
-        - shows which objects will be put in which file
-        - also handles images
-        - sane defaults for each, i.e. flag images go in flag folder
-
-EditView:
-    Main page:
-        - List of sections with links
-    Section page:
-        - List of objects, with links
-    Object page:
-        - Allows the editing of objects
-    Sidebar has collapsable list of previous, so object page has list of objects, section page has list of sections, each has back link at top.
-ExportView:
-    Main page:
-        - List of sections with links
-    Section page:
-        - List of objects, with their output file assigned
-
-
-
 Editing/saving/syncing etc:
 
 Each form locally maintains its own state
@@ -58,3 +14,25 @@ current structure issues:
         we can still loop over the contents, like an array
         allows fast access for getting and updating
 Each object page needs fast access to read/write files
+
+Application structure:
+
+preload.js exposes protected apis to the renderer process
+webworkers have access to node modules directly, can be imported
+
+all "api requests" create webworkers (one per request) which do the actual behavior
+    things like reading/writing files, parsing, imageprocessing etc.
+    any context data will need to be passed into the webworker message
+
+data form editor:
+    form: the form
+    standalone: if it is the standalone version
+    path: array of keys from the state/comments/basegame to this object type
+    value: the data it edits, or default for it
+    @save -> emits the form object
+    @discard -> emits
+
+    two modes, standalone and integrated
+    standalone emits save and discard events, save needs to be bound. Both clear the form.
+    integrated emits vuex events, gets the data, comments, and basegame itself
+        

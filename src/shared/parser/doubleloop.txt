@@ -1,0 +1,43 @@
+#testcomment
+test = {
+    test_prop_one = 1
+    test_prop_two = {
+        test_subprop_one = 1
+    }
+    test_prop_three = {
+        list_val_one #list comment
+        list_val_two
+        #inline list comment
+        list_val_three
+        "quote val"
+    }
+    silly = {
+        silly_prop = silly_value
+    }
+    test_color = {
+        100
+        200
+        300
+    }
+    test_inline = {
+        a = a
+        b = b
+        c = c
+        d = d
+        e = e
+    }
+    #above inline
+    test_comment = { #after object open
+        #above property
+        test_comment_property = "test value" #after property
+        #after property newline
+        test_comment_property_two = 3 #after property two
+    }
+    test_repeated = {
+        repeat_prop = value_one #repeat prop comment 1
+        repeat_prop = value_two #repeat prop comment 2
+    }
+}
+test_2 = {
+    test_prop_one = 1
+}

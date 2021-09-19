@@ -7,6 +7,7 @@ import './assets/style/main.scss'
 import router from './router/index'
 import store from './store/index'
 
+import { ipcRenderer } from 'electron'
 const isDev = process.env.NODE_ENV === 'development'
 
 Vue.config.devtools = isDev
@@ -21,9 +22,8 @@ new Vue({
   render: (h) => h(App),
 })
 
-// to avoild accesing electorn api from web app build
 if (window && window.process && window.process.type === 'renderer') {
-  const { ipcRenderer } = require('electron')
+  
 
   // handle menu event updates from main script
   ipcRenderer.on('change-view', (event, data) => {

@@ -1,4 +1,4 @@
-import {loadImage} from '../../ipc/image';
+// import {loadImage} from '../../ipc/image';
 import Vue from 'vue';
 
 export default {
@@ -21,10 +21,10 @@ export default {
             var id = payload.id;
             var format = payload.format;
             var done = payload.done;
-            loadImage(id, name, format, (data) => {
-                context.commit("setImage", {data, id, name});
-                done && done();
-            });
+            // loadImage(id, name, format, (data) => {
+            //     context.commit("setImage", {data, id, name});
+            //     done && done();
+            // });
         },
     }
 }

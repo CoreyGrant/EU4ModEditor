@@ -1,21 +1,45 @@
 <template>
 	<div class="date-input">
       <div>
-        <input type="number" @change="yearUpdate" :value="year" min="1" max="9999" class="year-input" ref="yearInput"/>
+        <input type="number" 
+            @change="yearUpdate" 
+            @wheel="onwheelYear"
+            @blur="emit"
+            @mouseout="emit"
+            :value="year" 
+            min="1" 
+            max="9999" 
+            class="year-input"/>
         <div class="number-change">
             <i class="fa fa-chevron-up" @click="yearChange(1)"></i>
             <i class="fa fa-chevron-down" @click="yearChange(-1)"></i>
         </div>
       </div>
       <div>
-        <input type="number" @change="yearUpdate" min="1" max="12" :value="month" class="month-input" ref="monthInput"/>
+        <input type="number"
+            @change="monthUpdate"
+            @wheel="onwheelMonth" 
+            @blur="emit"
+            @mouseout="emit"
+            min="1" 
+            max="12" 
+            :value="month"
+            class="month-input"/>
         <div class="number-change">
             <i class="fa fa-chevron-up" @click="monthChange(1)"></i>
             <i class="fa fa-chevron-down" @click="monthChange(-1)"></i>
         </div>
       </div>
       <div>
-        <input type="number" :max="daysMax" min="1" @change="yearUpdate" :value="day" class="day-input" ref="dayInput"/>
+        <input type="number" 
+            @wheel="onwheelDay" 
+            @blur="emit"
+            @mouseout="emit"
+            :max="daysMax" 
+            min="1" 
+            @change="dayUpdate" 
+            :value="day" 
+            class="day-input"/>
         <div class="number-change">
             <i class="fa fa-chevron-up" @click="dayChange(1)"></i>
             <i class="fa fa-chevron-down" @click="dayChange(-1)"></i>
@@ -42,9 +66,6 @@
 		},
 		mounted() {
             this.load(this.value);
-            this.$refs.yearInput.addEventListener('wheel', this.onwheelYear);
-            this.$refs.monthInput.addEventListener('wheel', this.onwheelMonth);
-            this.$refs.dayInput.addEventListener('wheel', this.onwheelDay);
 		},
         computed: {
             date(): string{
@@ -78,48 +99,39 @@
                 this.year = value;
                 if(this.year < 1){this.year = 1}
                 if(this.year > 9999){this.year = 9999}
-                this.change(this.date);
             },
             yearChange(change: any){
                 this.year += change;
                 if(this.year < 1){this.year = 1}
                 if(this.year > 9999){this.year = 9999}
-                this.change(this.date);
             },
             monthChange(change: number){
                 this.month += change;
                 if(this.month < 1){this.month = 1}
                 if(this.month > 12){this.month = 12}
-                this.change(this.date);
             },
             monthUpdate(event: any){
                 var value = event.target.value;
                 this.month = value;
                 if(this.month < 1){this.month = 1}
                 if(this.month > 12){this.month = 12}
-                this.change(this.date);
             },
             dayChange(change: any){
                 this.day += change;
                 if(this.day < 1){this.day = 1}
                 if(this.day > this.daysMax){this.day = this.daysMax}
-                this.change(this.date);
             },
             dayUpdate(event: any){
                 var value = event.target.value;
+                if(value < 1){value = 1}
+                if(value > this.daysMax){value = this.daysMax}
                 this.day = value;
-                if(this.day < 1){this.day = 1}
-                if(this.day > this.daysMax){this.day = this.daysMax}
-                this.change(this.date);
             },
-            change(val: string){
-                this.$emit("change", val);
-            },
+            emit(){
+                this.$emit("change", this.date);
+            }
 		},
         watch:{
-            value(newVal){
-                //this.load(newVal);
-            }
         }
 	});
 </script>

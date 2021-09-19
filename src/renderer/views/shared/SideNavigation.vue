@@ -4,9 +4,6 @@
     <div v-if="title">
       <h3>{{title}}</h3>
     </div>
-    <div v-if="hasChanges">
-      <router-link :to="changesLink"><i class="fa fa-danger"></i> Changes</router-link>
-    </div>
   </nav>
 </template>
 
@@ -25,16 +22,17 @@ export default Vue.extend({
   },
   computed: {
       title(): string{
-        return this.$route.params.name;
+        return this.$store.state.app 
+          && this.$store.state.app.projectSettings
+          && this.$store.state.app.projectSettings.name;
       },
-      hasChanges():boolean{
-        return Object.keys(this.$store.state.localState).length > 0;
-      },
-      changesLink(): string{
-        return `/project/${this.$route.params.name}/changes`;
-      }
   },
   methods:{
+    navigateHome():void{
+      if(this.$route.name !== "home"){
+        this.$router.push("/home");
+      }
+    }
   },
   watch:{
   }

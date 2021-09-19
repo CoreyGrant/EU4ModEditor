@@ -3,14 +3,14 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Project from '../views/project/Project.vue'
 import ExportProject from '../views/project/ExportProject.vue'
-import ProjectChanges from '../views/project/ProjectChanges.vue'
 import ProjectImages from '../views/project/ProjectImages.vue'
 import Advisors from '../views/project/sections/Advisors.vue'
 import Advisor from '../views/project/sections/Advisor.vue'
 import AdvisorHistory from '../views/project/sections/AdvisorHistory.vue'
 import Home from '../views/Home.vue'
-import Options from '../views/Options.vue'
+import AppSettings from '../views/AppSettings.vue'
 import AddProject from '../views/project/AddProject.vue';
+import BaseGameVersions from '../views/BaseGameVersions.vue';
 
 Vue.use(Router)
 
@@ -31,16 +31,16 @@ const router = new Router({
       component: Home,
     },
     {
-      path: '/options',
+      path: '/appSettings',
       meta: {
-        title: 'Options',
+        title: 'App Settings',
         icon: 'fa-home',
       },
-      name: "options",
-      component: Options,
+      name: "appSettings",
+      component: AppSettings,
     },
     {
-      path: '/project/:name',
+      path: '/project/:projectId',
       meta: {
         title: 'Project',
         icon: 'fa-info-circle',
@@ -49,16 +49,7 @@ const router = new Router({
       component: Project,
     },
     {
-      path: '/project/:name/changes',
-      meta: {
-        title: 'Project',
-        icon: 'fa-info-circle',
-      },
-      name: "projectChanges",
-      component: ProjectChanges,
-    },
-    {
-      path: '/project/:name/edit/advisors',
+      path: '/project/:projectId/edit/advisors',
       meta: {
         title: 'EditProject',
         icon: 'fa-info-circle',
@@ -67,7 +58,7 @@ const router = new Router({
       component: Advisors,
     },
     {
-      path: '/project/:name/edit/advisor/:id',
+      path: '/project/:projectId/edit/advisor/:objectId',
       meta: {
         title: 'EditProject',
         icon: 'fa-info-circle',
@@ -76,7 +67,7 @@ const router = new Router({
       component: Advisor,
     },
     {
-      path: '/project/:name/edit/advisorhistory/:id',
+      path: '/project/:projectId/edit/advisorhistory/:objectId',
       meta: {
         title: 'EditProject',
         icon: 'fa-info-circle',
@@ -85,7 +76,7 @@ const router = new Router({
       component: AdvisorHistory,
     },
     {
-      path: '/project/:name/export',
+      path: '/project/:projectId/export',
       meta: {
         title: 'ExportProject',
         icon: 'fa-info-circle',
@@ -94,7 +85,7 @@ const router = new Router({
       component: ExportProject,
     },
     {
-      path: '/project/:name/images',
+      path: '/project/:projectId/images',
       meta: {
         title: 'ProjectImages',
         icon: 'fa-info-circle',
@@ -110,6 +101,15 @@ const router = new Router({
       },
       name: "addProject",
       component: AddProject,
+    },
+    {
+      path: '/baseGameVersions',
+      meta: {
+        title: 'BaseGameVersions',
+        icon: 'fa-add',
+      },
+      name: "baseGameVersions",
+      component: BaseGameVersions,
     },
     {
       path: '*',

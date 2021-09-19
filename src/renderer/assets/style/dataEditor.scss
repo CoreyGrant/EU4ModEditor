@@ -1,11 +1,13 @@
 @import "variables.scss";
 
 .data-editor{
+    max-width: 600px;
     form{
         padding: 10px;
         .data-editor-question{
             display: flex;
             flex-direction: column;
+            margin-bottom: 10px;
             label{
 
             }
@@ -32,6 +34,9 @@
                     text-align: end;
                     color: $neon-orange;
                 }
+            }
+            .data-editor-question-error{
+                color: red;
             }
         }
     }

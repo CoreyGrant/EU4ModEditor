@@ -1,6 +1,6 @@
 <template>
   <div class="project-images">
-    <image-folder :folder="folderState" :name="name"></image-folder>
+    <image-folder :folder="folderState" :name="projectName"></image-folder>
   </div>
 </template>
 
@@ -25,8 +25,11 @@ export default Vue.extend({
     images(): any{
       return this.$store.state.project.images;
     },
-    name(): string{
-        return this.$route.params.name;
+    projectName(): string{
+        return this.$store.state.project.name;
+    },
+    projectId(): string{
+        return this.$route.params.projectId;
     }
   },
   methods: {

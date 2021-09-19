@@ -1,6 +1,6 @@
 <template>
 	<div class="condition-set-input">
-      
+      <textarea class="form-control" style="width: 100%;" rows="8" :value="tempValue" @input="change($event.target.value)"></textarea>
     </div>
 </template>
 
@@ -17,15 +17,33 @@
 		},
 		data(): any {
 			return {
+				tempValue: ''
 			};
 		},
 		mounted() {
+			this.load();
 		},
 		props: {
+			value: Object,
             type: String,// effect/trigger
             internal: String, // country/province
 		},
 		methods: {
+			load(){
+				this.tempValue = JSON.stringify(this.value, null, 2);
+			},
+			change(val:string){
+				this.tempValue = val;
+				this.$emit('change', val);
+			}
+		},
+		watch:{
+			$route(){
+				this.load();
+			},
+			value(){
+				this.load();
+			}
 		}
 	});
 </script>

@@ -12,5 +12,5 @@
   },
   "exclude": ["node_modules"],
   "files": ["src/vue-shims.d.ts"],
-  "include": ["src/**/*.ts", "src/**/*.vue", "src/utilities/workerSample.js"]
+  "include": ["src/**/*.ts", "src/**/*.vue", "src/shared/workerSample.js"]
 }

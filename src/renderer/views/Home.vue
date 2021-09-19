@@ -1,12 +1,16 @@
 <template>
-  <div>
+  <div class="home">
       <p>Welcome to the EU4 Mod Editor</p>
-      <p v-if="!hasEu4Path">No EU4 path selected. Go to options to load the EU4 data files.</p>
-      <router-link to="/addproject/">Add a new project</router-link>
+      <div>
+        <router-link to="/baseGameVersions/">Add a version of the base game</router-link>
+      </div>
+      <div>
+        <router-link to="/addproject/">Add a new project</router-link>
+      </div>
       <p>Existing projects</p>
       <ul>
-        <li v-for="project in projects" :key="project">
-          <router-link :to="'/project/' + project">{{project}}</router-link>
+        <li v-for="project in lastAccessedProjects" :key="project.id">
+          <router-link :to="'/project/' + project.id">{{project.name}}</router-link>
         </li>
       </ul>
   </div>
@@ -18,7 +22,6 @@ import Vue from 'vue'
 export default Vue.extend({
   name: 'Home',
   mounted(): void{
-    this.$store.dispatch("loadBaseGame");
   },
   data(): any{
     return {
@@ -26,14 +29,21 @@ export default Vue.extend({
   },
   computed: {
     projects(): []{
-      return this.$store.state.app.projectNames;
+      return this.$store.state.app.projects;
     },
-    hasEu4Path(): boolean{
-      return this.$store.state.app.options.eu4Path;
+    lastAccessedProjects(): any[]{
+      var projCopy =  [...this.projects];
+      projCopy.sort((x: any, y: any) => x.lastAccessed > y.lastAccessed ? 1 : -1);
+      return projCopy;
     }
   }
 })
 </script>
 
 <style>
+.home{
+  display: flex;
+  flex-direction: column;
+}
+
 </style>
