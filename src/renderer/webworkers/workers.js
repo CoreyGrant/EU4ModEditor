@@ -57,6 +57,10 @@ export function loadBaseGame(payload, partialCallback){
     return startAndRunWorker("loadBaseGame.js", payload, partialCallback);
 }
 
+export function loadBaseGameVersions(payload, partialCallback){
+    return startAndRunWorker("loadBaseGameVersions.js", payload, partialCallback);
+}
+
 export function exportProject(payload, partialCallback){
     return startAndRunWorker("exportProject.js", payload, partialCallback);
 }

@@ -74,7 +74,6 @@
                 if(this.value){
 				    this.jsonValue = JSON.stringify(this.value, null, 2);
                 }
-                this.mode = "json";
 			},
 			change(val:string){
                 if(this.mode == "json"){
@@ -82,7 +81,6 @@
                 } else {
                     this.clauzwitzValue = val;
                 }
-				
 			}
 		},
         computed: {

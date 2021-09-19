@@ -5,15 +5,18 @@ export default {
     state :() =>({
     }),
     mutations: {
-        setImage(state, payload){
-            var id = payload.id;
-            var data = payload.data;
-            var name = payload.name;
-            if(!state[name]){
-                Vue.set(state, name, {});
-            } 
-            Vue.set(state[name], id, data);
+        setImages(state, {images}){
+            Object.keys(images).forEach(s => Vue.set(state, s, images[s]));
         },
+        // setImage(state, payload){
+        //     var id = payload.id;
+        //     var data = payload.data;
+        //     var name = payload.name;
+        //     if(!state[name]){
+        //         Vue.set(state, name, {});
+        //     } 
+        //     Vue.set(state[name], id, data);
+        // },
     },
     actions: {
         loadImage(context, payload){

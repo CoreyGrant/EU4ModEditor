@@ -18,21 +18,22 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import {appStore, events} from '../store/app/store.js';
 
 export default Vue.extend({
   name: 'Home',
   mounted(): void{
+    events.projectListLoaded
+      .register(() => this.projectList = appStore.getProjectList());
   },
   data(): any{
     return {
+      projectList: appStore.getProjectList(),
     }
   },
   computed: {
-    projects(): []{
-      return this.$store.state.app.projects;
-    },
     lastAccessedProjects(): any[]{
-      var projCopy =  [...this.projects];
+      var projCopy =  [...this.projectList];
       projCopy.sort((x: any, y: any) => x.lastAccessed > y.lastAccessed ? 1 : -1);
       return projCopy;
     }

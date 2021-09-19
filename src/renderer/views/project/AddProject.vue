@@ -24,6 +24,7 @@
 import Vue from 'vue'
 import { importProjectForm } from '../../forms/importProject';
 import DataFormEditor from '../../components/DataFormEditor.vue';
+import {projectStore, events} from '../../store/app/store.js';
 
 export default Vue.extend({
   name: 'ImportProject',
@@ -34,8 +35,12 @@ export default Vue.extend({
     return {
       value: {},
       updates: [],
-      complete: false
+      complete: false,
+      //baseGameVersionsId: ''
     }
+  },
+  mounted():void{
+    
   },
   computed:{
     importProjectForm(): any{
@@ -49,14 +54,12 @@ export default Vue.extend({
     save(ip:any, done: any){
       this.complete = false;
       var payload = Object.assign({}, ip, {update: (s:string) => this.updates.push(s)})
-      this.$store.dispatch("importProject", payload)
+      projectStore.importProject(payload)
         .then((payload:any) => {
           this.complete = true;
           this.value = {};
           done();
-          return this.$store.dispatch("loadProjects").then(() =>{
-            this.$router.push("/project/" + payload.id);
-          })
+          this.$router.push("/project/" + payload.id);
         });
     },
     discard(){

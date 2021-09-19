@@ -17,6 +17,8 @@
 import Vue from 'vue'
 import Datatable from '../../../components/Datatable.vue';
 import {single, deep} from '../../../forms/shared/isInBase';
+import { projectStore } from '../../../store/app/store.js';
+import { EuObject } from '../../../store/app/models.js';
 
 export default Vue.extend({
   name: 'Advisors',
@@ -25,10 +27,13 @@ export default Vue.extend({
   },
   data(): any{
     return {
-        tab: 0
+        tab: 0,
+        advisorTypes: [],
+        historyAdvisors: []
     }
   },
   mounted(): void{
+      this.load();
   },
   computed: {
       projectId(): string{
@@ -45,19 +50,19 @@ export default Vue.extend({
           },{
               title: "Base",
               display: (at: any) => {
-                  if(!Object.keys(this.$store.state.baseGame).length){
-                      return null
-                  }
-                  var keyMatch = Object.values(this.$store.state.baseGame.files.common.advisorTypes).find((x: any) => single.common.advisorTypes(x, at));
-                  if(!keyMatch){
-                      return "<i class='fa fa-circle new' title='This object is new'></i>";
-                  }
-                  var deepMatch = deep(keyMatch, at);
-                  if(deepMatch){
-                      return "<i class='fa fa-circle identical' title='This object is identical to one in the base game'></i>";
-                  } else{
-                      return "<i class='fa fa-circle overriding' title='This object overrides one in the base game'></i>";
-                  }
+                //   if(!Object.keys(this.$store.state.baseGame).length){
+                //       return null
+                //   }
+                //   var keyMatch = Object.values(this.$store.state.baseGame.files.common.advisorTypes).find((x: any) => single.common.advisorTypes(x, at));
+                //   if(!keyMatch){
+                //       return "<i class='fa fa-circle new' title='This object is new'></i>";
+                //   }
+                //   var deepMatch = deep(keyMatch, at);
+                //   if(deepMatch){
+                //       return "<i class='fa fa-circle identical' title='This object is identical to one in the base game'></i>";
+                //   } else{
+                //       return "<i class='fa fa-circle overriding' title='This object overrides one in the base game'></i>";
+                //   }
               }
           }];
       },
@@ -75,34 +80,44 @@ export default Vue.extend({
           },{
               title: "Base",
               display: (at: any) => {
-                  if(!Object.keys(this.$store.state.baseGame).length){
-                      return null
-                  }
-                  var keyMatch = Object.values(this.$store.state.baseGame.files.history.advisors).find((x: any) => single.history.advisors(x, at));
-                  if(!keyMatch){
-                      return "<i class='fa fa-circle new' title='This object is new'></i>";
-                  }
-                  var deepMatch = deep(keyMatch, at);
-                  if(deepMatch){
-                      return "<i class='fa fa-circle identical' title='This object is identical to one in the base game'></i>";
-                  } else{
-                      return "<i class='fa fa-circle overriding' title='This object overrides one in the base game'></i>";
-                  }
+                //   if(!Object.keys(this.$store.state.baseGame).length){
+                //       return null
+                //   }
+                //   var keyMatch = Object.values(this.$store.state.baseGame.files.history.advisors).find((x: any) => single.history.advisors(x, at));
+                //   if(!keyMatch){
+                //       return "<i class='fa fa-circle new' title='This object is new'></i>";
+                //   }
+                //   var deepMatch = deep(keyMatch, at);
+                //   if(deepMatch){
+                //       return "<i class='fa fa-circle identical' title='This object is identical to one in the base game'></i>";
+                //   } else{
+                //       return "<i class='fa fa-circle overriding' title='This object overrides one in the base game'></i>";
+                //   }
               }
           }];
       },
-      advisorTypes(): []{
-          return (this.$store.state.project 
-            && this.$store.state.project.common.advisorTypes
-            && Object.values(this.$store.state.project.common.advisorTypes)) || [];
+  },
+  methods: {
+      load(){
+          this.advisorTypes = this.getAdvisorTypes();
+          this.historyAdvisors = this.getHistoryAdvisors();
       },
-      historyAdvisors():[]{
-          return (this.$store.state.project 
-            && this.$store.state.project.history.advisors
-            && Object.values(this.$store.state.project.history.advisors)) || [];
+      getAdvisorTypes(){
+        var common = projectStore.getFiles(this.projectId)["common"];
+        if(!common){return [];}
+        var advisorTypes = common["advisorTypes"];
+        if(!advisorTypes){return [];}
+        return Object.values(advisorTypes);
+      },
+      getHistoryAdvisors(){
+        var history = projectStore.getFiles(this.projectId)["history"];
+        if(!history){return [];}
+        var advisors = history["advisors"];
+        if(!advisors){return [];}
+        return Object.values(advisors);
       }
-
   }
+
 })
 </script>
 

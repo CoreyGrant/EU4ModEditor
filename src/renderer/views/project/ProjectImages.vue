@@ -23,10 +23,10 @@ export default Vue.extend({
   },
   computed:{
     images(): any{
-      return this.$store.state.project.images;
+      return Object.values(this.$store.state.project.images);
     },
     projectName(): string{
-        return this.$store.state.project.name;
+        return this.$store.state.app.projectSettings.name;
     },
     projectId(): string{
         return this.$route.params.projectId;

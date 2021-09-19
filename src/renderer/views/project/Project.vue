@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-
+import {baseGameStore, events, appStore, projectStore} from '../../store/app/store.js';
 export default Vue.extend({
   name: 'Project',
   components: {
@@ -24,28 +24,27 @@ export default Vue.extend({
   data(): any{
     return {
       loading: false,
+      name: '',
     }
   },
   mounted(): void{
     this.load();
   },
   methods:{
-    load(){
-      console.log(this.$store.state.project.id, this.projectId);
-      if(this.$store.state.project.id !== this.projectId){
+    load(): void{
+      if(!projectStore.loaded(this.projectId)){
         this.loading = true;
-        this.$store.dispatch("loadProject", {id: this.projectId})
-          .then(() => this.loading = false);
+        projectStore.loadProject({id: this.projectId})
+          .then(() => {
+            this.loading = false
+            this.load();
+          });
+      } else{
+        this.name = projectStore.getProjectSettings(this.$route.params.projectId).name
       }
     }
   },
   computed:{
-    name(): string{
-      return this.$store.state.app.projectSettings.name
-    },
-    project(): any{
-      return this.$store.state.project;
-    },
     projectId(): string{
       return this.$route.params.projectId;
     },

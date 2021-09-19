@@ -14,15 +14,13 @@ import Vue from 'vue'
 import Vuex from 'vuex';
 import Navigation from './views/shared/Navigation.vue'
 import SideNavigation from './views/shared/SideNavigation.vue'
-import store from './store/index';
 import router from './router/index';
 
 
-Vue.use(Vuex)
+//Vue.use(Vuex)
 
 export default Vue.extend({
   name: 'Eu4ModEditor',
-  store,
   router,
   components:{
     Navigation,

@@ -44,6 +44,7 @@
     import FolderSelect from './FolderSelect.vue';
     import {deep, single} from '../forms/shared/isInBase';
     import _ from 'lodash';
+    import {projectStore, objectStore, events, baseGameStore, appStore, baseGameObjectStore, state} from '../store/app/store.js';
 
     // Cen be used directly using the state store (localState),
     // Or with a supplied localState object
@@ -60,7 +61,9 @@
                 errors: {},
                 tempValue: {},
                 baseGameStatus: '',
-                saving: false
+                saving: false,
+                baseGame: {},
+                integratedValue: {}
             }
 		},
 		created() {
@@ -82,24 +85,20 @@
             oldVal(): any{
                 return this.standalone ? this.value : this.integratedValue;
             },
-            integratedValue(): any{
-                var projType = this.getPath(this.$store.state.project, this.path);
-                return projType[this.objectId];
-            },
             formValid(): boolean{
                 return !Object.keys(this.errors).length;
             },
-            baseGame(): any{
-                if(this.standalone){return null}
-                if(!Object.keys(this.$store.state.baseGame)){
-                    return null;
-                }
-                var comparison = this.getPath(single, this.path);
-                var bgType = this.getPath(this.$store.state.baseGame.files, this.path);
-                return Object.values(bgType).find((bg: any) => comparison(bg, this.oldVal)) || null;
-            }
         },
 		methods: {
+            loadIntegratedValue(){
+                this.integratedValue = objectStore.getObject(this.projectId, this.path[0], this.path[1], this.objectId);
+            },
+            loadBaseGame(){
+                if(this.standalone){return null}
+                var version = projectStore.getProjectSettings(this.projectId).baseGameVersion;
+                var comparison = this.getPath(single, this.path);
+                this.baseGame = baseGameObjectStore.getObjectByComparison(version, this.path[0], this.path[1], (bgObj: any) => comparison(bgObj, this.integratedValue));
+            },
             jsonInputError(question: any, message: string){
                 if(message == null){
                     Vue.delete(this.errors, question.name);
@@ -132,7 +131,7 @@
                 if(typeof key === "string"){
                     return (<any>selectLists)[key];
                 }
-                return key(this.$store.state);
+                return key(state);
             },
             validate(value: any, question: any): boolean{
                 if(question.type === "json"){
@@ -175,9 +174,11 @@
                 this.valueChange(question, event.target.value);
             },
             load(){
-                this.tempValue = JSON.parse(JSON.stringify(this.oldVal));
+                
                 // only for integrated version
                 if(!this.standalone){
+                    this.loadIntegratedValue();
+                    this.loadBaseGame();
                     var match = !!this.baseGame;
                     if(!match){
                         this.baseGameStatus = 'new'
@@ -188,6 +189,7 @@
                         this.baseGameStatus = 'overriding';
                     }
                 }
+                this.tempValue = JSON.parse(JSON.stringify(this.oldVal));
             },
             validateForm(){
                 var formValid = true;

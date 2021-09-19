@@ -14,6 +14,7 @@
 import Vue from 'vue'
 import DataFormEditor from '../components/DataFormEditor.vue'
 import {optionsForm} from '../forms/options';
+import {events, appStore} from '../store/app/store.js';
 
 export default Vue.extend({
   name: 'AppSettings',
@@ -21,22 +22,30 @@ export default Vue.extend({
     DataFormEditor
   },
   mounted(): void{
+    this.loadedEventId = events.appSettingsLoaded
+      .register(() => this.settings = appStore.getSettings());
+    this.savedEventId = events.appSettingsSaved
+      .register(() => this.settings = appStore.getSettings());
+  },
+  destroyed(){
+    events.appSettingsSaved.deregister(this.savedEventId);
+    events.appSettingsLoaded.deregister(this.loadedEventId);
   },
   data(): any{
     return {
+      loadedEventId: '',
+      savedEventId: '',
+      settings: appStore.getSettings()
     }
   },
   computed: {
-    settings(): any{
-      return this.$store.state.app.settings;
-    },
     optionsForm():any[]{
         return optionsForm;
     },
   },
   methods: {
-      save(newLocalState:any, done: any){
-          this.$store.dispatch('saveSettings', {settings: JSON.parse(JSON.stringify(newLocalState))})
+      save(settings:any, done: any){
+          appStore.saveSettings(settings)
             .then(done);
       },
       discard(){

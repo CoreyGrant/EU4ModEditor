@@ -3,7 +3,6 @@ import {deserializeProject} from '../../shared/parser/projectSerializer';
 
 import {importImages} from '../../shared/file/projectData';
 self.onmessage = function(e){
-    console.log("recieved a message", e);
     var message = e.data;
     var {context, payload} = message;
     var {version, path} = payload;
@@ -38,7 +37,7 @@ self.onmessage = function(e){
         images: projectImages
     });
 
-    var output = baseGameVersions(context.appFolder).get();
+    //var output = baseGameVersions(context.appFolder).get();
 
-    self.postMessage({type: "done", data: output});
+    self.postMessage({type: "done"});
 }

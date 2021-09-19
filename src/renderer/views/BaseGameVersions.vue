@@ -26,6 +26,7 @@
 import Vue from 'vue'
 import DataFormEditor from '../components/DataFormEditor.vue';
 import {importBaseGameForm} from '../forms/importBaseGame';
+import {baseGameStore, events, appStore} from '../store/app/store.js';
 
 export default Vue.extend({
   name: 'BaseGameVersions',
@@ -33,18 +34,24 @@ export default Vue.extend({
       DataFormEditor
   },
   mounted(): void{
+      this.bgvLoadedEventId = events.baseGameVersionsLoaded
+        .register(() => this.baseGameVersions = appStore.getBaseGameVersions());
+  },
+  destroyed(){
+      events.baseGameVersionsLoaded.deregister(this.bgvLoadedEventId);
   },
   data(): any{
     return {
-        value: {},
-      updates: []
+        bgvLoadedEventId: '',
+      value: {},
+      updates: [],
+      baseGameVersions: appStore.getBaseGameVersions()
     }
   },
   methods: {
       save(ip:any, done: any){
-          console.log(ip);
         var payload = Object.assign({}, ip, {update: (s:string) => this.updates.push(s)})
-        this.$store.dispatch("importBaseGame", payload).then(done);
+        baseGameStore.importBaseGame(payload).then(done);
         this.value = {};
     },
     discard(){
@@ -58,9 +65,6 @@ export default Vue.extend({
       importBaseGameForm(): any{
           return importBaseGameForm;
       },
-      baseGameVersions(): string[]{
-          return this.$store.state.app.baseGameVersions;
-      }
   }
 })
 </script>
