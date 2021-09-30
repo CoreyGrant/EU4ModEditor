@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    </head>
+    <body>
+        <div id="map" style="height: 600px; width: 1000px;">
+
+        </div>
+        <script>
+            var element = document.getElementById('map');
+            var map = L.map(element, {
+                center: [0,0],
+                zoom: 0,
+                crs: L.CRS.Simple,
+            });
+            var provincesLayer;
+            L.imageOverlay("http://localhost:8000/terrain.bmp", [[90, -180], [-90, 180]])
+                .addTo(map);
+            fetch('/provinces.json')
+                .then(x => x.json())
+                .then(json => {
+                    provincesLayer = L.geoJSON(json, {
+                        style: function(feature){
+                            // feature.properties.simpleTerrainColor
+                            var color = feature.properties.continent ? '#666666' : '#FFFFFF'
+                            return {
+                                color: '#000000',
+                                weight: 1,
+                                fill: true,
+                                fillColor: color,
+                                fillOpacity: 0.5,
+                            }
+                        }
+                    }).bindPopup(function (layer) {
+                        return layer.feature.properties.continent || 'none';
+                    }).addTo(map);
+                });
+        </script>
+    </body>
+</html>
